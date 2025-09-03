@@ -248,13 +248,7 @@
             color: white;
         }
 
-        /* 設定按鈕 */
-        .settings-toggle {
-            position: fixed;
-            right: 20px;
-            bottom: 20px;
-            width: 60px;
-            height: 60px;
+px;
             background: var(--primary);
             color: white;
             border-radius: 50%;
@@ -1334,11 +1328,20 @@
             }
         }
 
-        // 快速標籤切換
-        function toggleTag(btn) {
-            btn.classList.toggle('active');
+        // 快捷篩選功能
+        function quickFilter(type) {
+            console.log('Quick filter:', type);
             // 這裡可以加入實際的篩選邏輯
+            alert(`篩選：${type}`);
         }
+
+        // 隱藏載入畫面
+        setTimeout(() => {
+            const splash = document.getElementById('splashScreen');
+            if (splash) {
+                splash.style.display = 'none';
+            }
+        }, 3000);
 
         // 設定面板開關
         function toggleSettings() {
