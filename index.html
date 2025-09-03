@@ -17,40 +17,56 @@
             transition: all 0.3s ease;
         }
 
-        /* 三種主題配色系統 */
-        .theme-therapy {
-            --primary: #10b981;
-            --primary-light: #34d399;
-            --primary-dark: #059669;
-            --secondary: #14b8a6;
-            --accent: #fbbf24;
-            --bg-gradient: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
-            --card-shadow: 0 4px 20px rgba(16, 185, 129, 0.15);
+        /* 專業模式 - 米白底色，黑紅配色 */
+        .theme-professional {
+            --bg-main: #FAF7F0;
+            --primary: #2C3E50;
+            --accent: #E74C3C;
+            --text-primary: #2C3E50;
+            --text-secondary: #7F8C8D;
+            --card-bg: #FFFFFF;
+            --bg-gradient: linear-gradient(135deg, #2C3E50 0%, #E74C3C 100%);
+            --card-shadow: 0 4px 20px rgba(44, 62, 80, 0.1);
         }
 
+        /* 療癒模式 - 橘色底色，暖色系 */
         .theme-healing {
-            --primary: #ec4899;
-            --primary-light: #f472b6;
-            --primary-dark: #db2777;
-            --secondary: #a855f7;
-            --accent: #fbbf24;
-            --bg-gradient: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
-            --card-shadow: 0 4px 20px rgba(236, 72, 153, 0.15);
+            --bg-main: #FFF5E6;
+            --primary: #FF8C42;
+            --accent: #FFD23F;
+            --text-primary: #5D4037;
+            --text-secondary: #8D6E63;
+            --card-bg: #FFF8F0;
+            --bg-gradient: linear-gradient(135deg, #FF8C42 0%, #FFB347 100%);
+            --card-shadow: 0 4px 20px rgba(255, 140, 66, 0.15);
         }
 
+        /* 自訂模式 - 可選配色 */
         .theme-custom {
-            --primary: #3b82f6;
-            --primary-light: #60a5fa;
-            --primary-dark: #2563eb;
-            --secondary: #8b5cf6;
-            --accent: #10b981;
-            --bg-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-            --card-shadow: 0 4px 20px rgba(59, 130, 246, 0.15);
+            --bg-main: var(--custom-bg, #F0F8FF);
+            --primary: var(--custom-primary, #4A90E2);
+            --accent: var(--custom-accent, #7B68EE);
+            --text-primary: var(--custom-text, #333333);
+            --text-secondary: #666666;
+            --card-bg: #FFFFFF;
+            --bg-gradient: linear-gradient(135deg, var(--custom-primary, #4A90E2) 0%, var(--custom-accent, #7B68EE) 100%);
+            --card-shadow: 0 4px 20px rgba(74, 144, 226, 0.15);
+        }
+
+        /* 字體大小設定 */
+        .font-small { font-size: 14px; }
+        .font-normal { font-size: 16px; }
+        .font-large { font-size: 18px; }
+        .font-xlarge { font-size: 20px; }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
         }
 
         /* 導航列 */
         .navbar {
-            background: white;
+            background: var(--card-bg);
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             position: sticky;
             top: 0;
@@ -78,46 +94,177 @@
 
         .nav-links {
             display: flex;
-            gap: 30px;
+            gap: 20px;
             align-items: center;
         }
 
         .nav-links a {
-            color: #333;
+            color: var(--text-primary);
             text-decoration: none;
             transition: color 0.3s;
         }
 
         .nav-links a:hover {
-            color: var(--primary);
+            color: var(--accent);
         }
 
-        .theme-switcher {
+        /* 設定面板 */
+        .settings-panel {
+            position: fixed;
+            right: -400px;
+            top: 0;
+            width: 400px;
+            height: 100vh;
+            background: var(--card-bg);
+            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
+            z-index: 2001;
+            overflow-y: auto;
+        }
+
+        .settings-panel.open {
+            right: 0;
+        }
+
+        .settings-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .settings-content {
+            padding: 20px;
+        }
+
+        .settings-section {
+            margin-bottom: 30px;
+        }
+
+        .settings-section h3 {
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .theme-options {
             display: flex;
             gap: 10px;
+            margin-bottom: 20px;
         }
 
         .theme-btn {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            border: 2px solid transparent;
+            padding: 10px 20px;
+            border: 2px solid var(--primary);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s;
         }
 
-        .theme-btn:hover {
+        .theme-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 自訂顏色選擇器 */
+        .color-picker {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+
+        .color-picker.show {
+            display: block;
+        }
+
+        .color-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .color-option label {
+            width: 120px;
+            color: var(--text-secondary);
+        }
+
+        .color-option input[type="color"] {
+            width: 50px;
+            height: 35px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* 字體大小選擇 */
+        .font-size-options {
+            display: flex;
+            gap: 10px;
+        }
+
+        .font-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--primary);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .font-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 語言選擇 */
+        .language-select {
+            display: flex;
+            gap: 10px;
+        }
+
+        .lang-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--primary);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .lang-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 設定按鈕 */
+        .settings-toggle {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            z-index: 1999;
+            font-size: 24px;
+            transition: transform 0.3s;
+        }
+
+        .settings-toggle:hover {
             transform: scale(1.1);
         }
-
-        .theme-btn.active {
-            border-color: #333;
-            box-shadow: 0 0 0 3px rgba(0,0,0,0.1);
-        }
-
-        .theme-btn.therapy { background: linear-gradient(135deg, #10b981, #14b8a6); }
-        .theme-btn.healing { background: linear-gradient(135deg, #ec4899, #a855f7); }
-        .theme-btn.custom { background: linear-gradient(135deg, #3b82f6, #8b5cf6); }
 
         /* 英雄區塊 */
         .hero {
@@ -193,10 +340,11 @@
             padding: 15px 25px;
             font-size: 16px;
             outline: none;
+            color: var(--text-primary);
         }
 
         .search-btn {
-            background: var(--primary);
+            background: var(--accent);
             color: white;
             border: none;
             padding: 15px 30px;
@@ -207,7 +355,6 @@
         }
 
         .search-btn:hover {
-            background: var(--primary-dark);
             transform: scale(1.05);
         }
 
@@ -222,7 +369,7 @@
             text-align: center;
             font-size: 36px;
             margin-bottom: 50px;
-            color: #333;
+            color: var(--text-primary);
         }
 
         .feature-grid {
@@ -232,7 +379,7 @@
         }
 
         .feature-card {
-            background: white;
+            background: var(--card-bg);
             border-radius: 20px;
             padding: 30px;
             text-align: center;
@@ -259,7 +406,7 @@
 
         /* 房源卡片 */
         .properties {
-            background: #f8f9fa;
+            background: var(--bg-main);
             padding: 80px 20px;
         }
 
@@ -273,7 +420,7 @@
         }
 
         .property-card {
-            background: white;
+            background: var(--card-bg);
             border-radius: 20px;
             overflow: hidden;
             box-shadow: var(--card-shadow);
@@ -314,6 +461,7 @@
             border-radius: 20px;
             cursor: pointer;
             transition: all 0.3s;
+            color: var(--text-primary);
         }
 
         .view-360:hover {
@@ -329,11 +477,11 @@
             font-size: 20px;
             font-weight: bold;
             margin-bottom: 10px;
-            color: #333;
+            color: var(--text-primary);
         }
 
         .property-location {
-            color: #666;
+            color: var(--text-secondary);
             margin-bottom: 15px;
             display: flex;
             align-items: center;
@@ -348,19 +496,19 @@
         }
 
         .feature-tag {
-            background: #f0f0f0;
+            background: var(--bg-main);
             padding: 5px 12px;
             border-radius: 15px;
             font-size: 12px;
-            color: #666;
+            color: var(--text-secondary);
         }
 
         .property-footer {
             display: flex;
-            justify-content: between;
+            justify-content: space-between;
             align-items: center;
             padding-top: 20px;
-            border-top: 1px solid #eee;
+            border-top: 1px solid var(--bg-main);
         }
 
         .property-price {
@@ -377,11 +525,10 @@
             border-radius: 25px;
             cursor: pointer;
             transition: all 0.3s;
-            margin-left: auto;
         }
 
         .view-btn:hover {
-            background: var(--primary-dark);
+            background: var(--accent);
             transform: scale(1.05);
         }
 
@@ -446,35 +593,94 @@
         }
     </style>
 </head>
-<body class="theme-therapy">
+<body class="theme-professional font-normal">
     <!-- 導航列 -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="logo">
                 <span>🏠</span>
-                <span>JoyRental</span>
+                <span class="logo-text">JoyRental</span>
             </div>
             
             <div class="nav-links">
-                <a href="#home">首頁</a>
-                <a href="#features">功能</a>
-                <a href="#properties">房源</a>
-                <a href="#about">關於</a>
-                
-                <div class="theme-switcher">
-                    <div class="theme-btn therapy active" onclick="changeTheme('therapy')" title="療癒系"></div>
-                    <div class="theme-btn healing" onclick="changeTheme('healing')" title="平安喜樂"></div>
-                    <div class="theme-btn custom" onclick="changeTheme('custom')" title="自訂"></div>
-                </div>
+                <a href="#home" class="nav-home">首頁</a>
+                <a href="#features" class="nav-features">功能</a>
+                <a href="#properties" class="nav-properties">房源</a>
+                <a href="#about" class="nav-about">關於</a>
             </div>
         </div>
     </nav>
 
+    <!-- 設定按鈕 -->
+    <div class="settings-toggle" onclick="toggleSettings()">⚙️</div>
+
+    <!-- 設定面板 -->
+    <div class="settings-panel" id="settingsPanel">
+        <div class="settings-header">
+            <h2>個人化設定</h2>
+            <button onclick="toggleSettings()" style="background: none; border: none; font-size: 24px; cursor: pointer;">✕</button>
+        </div>
+        
+        <div class="settings-content">
+            <!-- 主題選擇 -->
+            <div class="settings-section">
+                <h3>主題模式</h3>
+                <div class="theme-options">
+                    <button class="theme-btn active" onclick="setTheme('professional')">專業</button>
+                    <button class="theme-btn" onclick="setTheme('healing')">療癒</button>
+                    <button class="theme-btn" onclick="setTheme('custom')">自訂</button>
+                </div>
+                
+                <!-- 自訂顏色選擇器 -->
+                <div class="color-picker" id="colorPicker">
+                    <div class="color-option">
+                        <label>背景色：</label>
+                        <input type="color" id="customBg" value="#F0F8FF" onchange="updateCustomTheme()">
+                    </div>
+                    <div class="color-option">
+                        <label>主色調：</label>
+                        <input type="color" id="customPrimary" value="#4A90E2" onchange="updateCustomTheme()">
+                    </div>
+                    <div class="color-option">
+                        <label>強調色：</label>
+                        <input type="color" id="customAccent" value="#7B68EE" onchange="updateCustomTheme()">
+                    </div>
+                    <div class="color-option">
+                        <label>文字色：</label>
+                        <input type="color" id="customText" value="#333333" onchange="updateCustomTheme()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 字體大小 -->
+            <div class="settings-section">
+                <h3>字體大小</h3>
+                <div class="font-size-options">
+                    <button class="font-btn" onclick="setFontSize('small')">小</button>
+                    <button class="font-btn active" onclick="setFontSize('normal')">標準</button>
+                    <button class="font-btn" onclick="setFontSize('large')">大</button>
+                    <button class="font-btn" onclick="setFontSize('xlarge')">特大</button>
+                </div>
+            </div>
+
+            <!-- 語言選擇 -->
+            <div class="settings-section">
+                <h3>語言 Language</h3>
+                <div class="language-select">
+                    <button class="lang-btn active" onclick="setLanguage('zh-TW')">繁體中文</button>
+                    <button class="lang-btn" onclick="setLanguage('zh-CN')">简体中文</button>
+                    <button class="lang-btn" onclick="setLanguage('en')">English</button>
+                    <button class="lang-btn" onclick="setLanguage('ja')">日本語</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 英雄區塊 -->
     <section class="hero" id="home">
         <div class="hero-content">
-            <h1>🌟 平安喜樂 找到心靈的家</h1>
-            <p>AI智能配對 × 360°環景看房 × 社群互動評價</p>
+            <h1 class="hero-title">🌟 平安喜樂 找到心靈的家</h1>
+            <p class="hero-subtitle">AI智能配對 × 360°環景看房 × 社群互動評價</p>
             
             <div class="search-box">
                 <input type="text" class="search-input" placeholder="輸入地區、社區或關鍵字...">
@@ -485,42 +691,42 @@
 
     <!-- 功能展示 -->
     <section class="features" id="features">
-        <h2 class="section-title">革命性功能</h2>
+        <h2 class="section-title feature-title">革命性功能</h2>
         <div class="feature-grid">
             <div class="feature-card">
                 <div class="feature-icon">🏡</div>
-                <h3>360°環景看房</h3>
-                <p>身臨其境的看房體驗，在家就能走遍每個角落</p>
+                <h3 class="feature-name">360°環景看房</h3>
+                <p class="feature-desc">身臨其境的看房體驗，在家就能走遍每個角落</p>
             </div>
             
             <div class="feature-card">
                 <div class="feature-icon">🤖</div>
-                <h3>AI智能配對</h3>
-                <p>根據您的生活習慣和偏好，推薦最適合的房源</p>
+                <h3 class="feature-name">AI智能配對</h3>
+                <p class="feature-desc">根據您的生活習慣和偏好，推薦最適合的房源</p>
             </div>
             
             <div class="feature-card">
                 <div class="feature-icon">👥</div>
-                <h3>社群真實評價</h3>
-                <p>住戶真實分享，讓您租房更安心</p>
+                <h3 class="feature-name">社群真實評價</h3>
+                <p class="feature-desc">住戶真實分享，讓您租房更安心</p>
             </div>
             
             <div class="feature-card">
                 <div class="feature-icon">🛡️</div>
-                <h3>智能防詐系統</h3>
-                <p>AI辨識可疑房源，保護您的權益</p>
+                <h3 class="feature-name">智能防詐系統</h3>
+                <p class="feature-desc">AI辨識可疑房源，保護您的權益</p>
             </div>
             
             <div class="feature-card">
                 <div class="feature-icon">🔧</div>
-                <h3>一站式維修</h3>
-                <p>線上報修、透明報價、品質保證</p>
+                <h3 class="feature-name">一站式維修</h3>
+                <p class="feature-desc">線上報修、透明報價、品質保證</p>
             </div>
             
             <div class="feature-card">
                 <div class="feature-icon">📱</div>
-                <h3>LINE整合</h3>
-                <p>訊息通知、線上簽約、便利溝通</p>
+                <h3 class="feature-name">LINE整合</h3>
+                <p class="feature-desc">訊息通知、線上簽約、便利溝通</p>
             </div>
         </div>
     </section>
@@ -528,7 +734,7 @@
     <!-- 房源展示 -->
     <section class="properties" id="properties">
         <div>
-            <h2 class="section-title">精選房源</h2>
+            <h2 class="section-title property-title">精選房源</h2>
             <div class="property-grid" id="propertyGrid">
                 <!-- 房源卡片會動態載入 -->
             </div>
@@ -545,6 +751,86 @@
     </div>
 
     <script>
+        // 多語言文字
+        const translations = {
+            'zh-TW': {
+                'logo-text': 'JoyRental',
+                'nav-home': '首頁',
+                'nav-features': '功能',
+                'nav-properties': '房源',
+                'nav-about': '關於',
+                'hero-title': '🌟 平安喜樂 找到心靈的家',
+                'hero-subtitle': 'AI智能配對 × 360°環景看房 × 社群互動評價',
+                'search-placeholder': '輸入地區、社區或關鍵字...',
+                'search-btn': '🔍 智能搜尋',
+                'feature-title': '革命性功能',
+                'property-title': '精選房源',
+                'feature-1': '360°環景看房',
+                'feature-1-desc': '身臨其境的看房體驗，在家就能走遍每個角落',
+                'feature-2': 'AI智能配對',
+                'feature-2-desc': '根據您的生活習慣和偏好，推薦最適合的房源',
+                'feature-3': '社群真實評價',
+                'feature-3-desc': '住戶真實分享，讓您租房更安心'
+            },
+            'zh-CN': {
+                'logo-text': 'JoyRental',
+                'nav-home': '首页',
+                'nav-features': '功能',
+                'nav-properties': '房源',
+                'nav-about': '关于',
+                'hero-title': '🌟 平安喜乐 找到心灵的家',
+                'hero-subtitle': 'AI智能配对 × 360°环景看房 × 社群互动评价',
+                'search-placeholder': '输入地区、社区或关键字...',
+                'search-btn': '🔍 智能搜索',
+                'feature-title': '革命性功能',
+                'property-title': '精选房源',
+                'feature-1': '360°环景看房',
+                'feature-1-desc': '身临其境的看房体验，在家就能走遍每个角落',
+                'feature-2': 'AI智能配对',
+                'feature-2-desc': '根据您的生活习惯和偏好，推荐最适合的房源',
+                'feature-3': '社群真实评价',
+                'feature-3-desc': '住户真实分享，让您租房更安心'
+            },
+            'en': {
+                'logo-text': 'JoyRental',
+                'nav-home': 'Home',
+                'nav-features': 'Features',
+                'nav-properties': 'Properties',
+                'nav-about': 'About',
+                'hero-title': '🌟 Find Your Peaceful Home',
+                'hero-subtitle': 'AI Matching × 360° Virtual Tour × Community Reviews',
+                'search-placeholder': 'Enter location, community or keywords...',
+                'search-btn': '🔍 Smart Search',
+                'feature-title': 'Revolutionary Features',
+                'property-title': 'Featured Properties',
+                'feature-1': '360° Virtual Tour',
+                'feature-1-desc': 'Immersive viewing experience from home',
+                'feature-2': 'AI Smart Matching',
+                'feature-2-desc': 'Personalized recommendations based on your lifestyle',
+                'feature-3': 'Community Reviews',
+                'feature-3-desc': 'Real reviews from actual residents'
+            },
+            'ja': {
+                'logo-text': 'JoyRental',
+                'nav-home': 'ホーム',
+                'nav-features': '機能',
+                'nav-properties': '物件',
+                'nav-about': '私たちについて',
+                'hero-title': '🌟 心安らぐお家を見つけよう',
+                'hero-subtitle': 'AIマッチング × 360°バーチャル内覧 × コミュニティレビュー',
+                'search-placeholder': 'エリア、コミュニティまたはキーワードを入力...',
+                'search-btn': '🔍 スマート検索',
+                'feature-title': '革新的な機能',
+                'property-title': 'おすすめ物件',
+                'feature-1': '360°バーチャル内覧',
+                'feature-1-desc': '自宅にいながら臨場感のある内覧体験',
+                'feature-2': 'AIスマートマッチング',
+                'feature-2-desc': 'あなたのライフスタイルに合わせた物件をご提案',
+                'feature-3': 'コミュニティレビュー',
+                'feature-3-desc': '実際の入居者による本音のレビュー'
+            }
+        };
+
         // 房源資料
         const properties = [
             {
@@ -643,15 +929,75 @@
             `).join('');
         }
 
+        // 設定面板開關
+        function toggleSettings() {
+            const panel = document.getElementById('settingsPanel');
+            panel.classList.toggle('open');
+        }
+
         // 主題切換
-        function changeTheme(theme) {
-            document.body.className = `theme-${theme}`;
+        function setTheme(theme) {
+            document.body.className = document.body.className.replace(/theme-\w+/, `theme-${theme}`);
             
             // 更新按鈕狀態
             document.querySelectorAll('.theme-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
-            document.querySelector(`.theme-btn.${theme}`).classList.add('active');
+            event.target.classList.add('active');
+            
+            // 顯示/隱藏自訂顏色選擇器
+            const colorPicker = document.getElementById('colorPicker');
+            if (theme === 'custom') {
+                colorPicker.classList.add('show');
+            } else {
+                colorPicker.classList.remove('show');
+            }
+        }
+
+        // 更新自訂主題
+        function updateCustomTheme() {
+            const root = document.documentElement;
+            root.style.setProperty('--custom-bg', document.getElementById('customBg').value);
+            root.style.setProperty('--custom-primary', document.getElementById('customPrimary').value);
+            root.style.setProperty('--custom-accent', document.getElementById('customAccent').value);
+            root.style.setProperty('--custom-text', document.getElementById('customText').value);
+        }
+
+        // 字體大小切換
+        function setFontSize(size) {
+            document.body.className = document.body.className.replace(/font-\w+/, `font-${size}`);
+            
+            // 更新按鈕狀態
+            document.querySelectorAll('.font-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // 語言切換
+        function setLanguage(lang) {
+            const trans = translations[lang];
+            
+            // 更新文字
+            for (let key in trans) {
+                const element = document.querySelector(`.${key}`);
+                if (element) {
+                    if (key === 'search-placeholder') {
+                        element.placeholder = trans[key];
+                    } else {
+                        element.textContent = trans[key];
+                    }
+                }
+            }
+            
+            // 更新按鈕狀態
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // 更新 HTML lang 屬性
+            document.documentElement.lang = lang;
         }
 
         // 360環景
@@ -709,6 +1055,9 @@
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeModal();
+                if (document.getElementById('settingsPanel').classList.contains('open')) {
+                    toggleSettings();
+                }
             }
         });
     </script>
