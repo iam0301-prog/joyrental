@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JoyRental - 療癒系智能租屋平台</title>
+    <style>
+        /* 基礎設定 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        /* 三種主題配色系統 */
+        .theme-therapy {
+            --primary: #10b981;
+            --primary-light: #34d399;
+            --primary-dark: #059669;
+            --secondary: #14b8a6;
+            --accent: #fbbf24;
+            --bg-gradient: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
+            --card-shadow: 0 4px 20px rgba(16, 185, 129, 0.15);
+        }
+
+        .theme-healing {
+            --primary: #ec4899;
+            --primary-light: #f472b6;
+            --primary-dark: #db2777;
+            --secondary: #a855f7;
+            --accent: #fbbf24;
+            --bg-gradient: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+            --card-shadow: 0 4px 20px rgba(236, 72, 153, 0.15);
+        }
+
+        .theme-custom {
+            --primary: #3b82f6;
+            --primary-light: #60a5fa;
+            --primary-dark: #2563eb;
+            --secondary: #8b5cf6;
+            --accent: #10b981;
+            --bg-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            --card-shadow: 0 4px 20px rgba(59, 130, 246, 0.15);
+        }
+
+        /* 導航列 */
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .theme-switcher {
+            display: flex;
+            gap: 10px;
+        }
+
+        .theme-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .theme-btn.active {
+            border-color: #333;
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.1);
+        }
+
+        .theme-btn.therapy { background: linear-gradient(135deg, #10b981, #14b8a6); }
+        .theme-btn.healing { background: linear-gradient(135deg, #ec4899, #a855f7); }
+        .theme-btn.custom { background: linear-gradient(135deg, #3b82f6, #8b5cf6); }
+
+        /* 英雄區塊 */
+        .hero {
+            background: var(--bg-gradient);
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            opacity: 0.95;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 搜尋框 */
+        .search-box {
+            background: white;
+            border-radius: 50px;
+            padding: 8px;
+            display: flex;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            padding: 15px 25px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .search-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        /* 功能卡片 */
+        .features {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 50px;
+            color: #333;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--bg-gradient);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 36px;
+        }
+
+        /* 房源卡片 */
+        .properties {
+            background: #f8f9fa;
+            padding: 80px 20px;
+        }
+
+        .property-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .property-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s;
+        }
+
+        .property-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .property-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .property-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--accent);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .view-360 {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(10px);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .view-360:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
+        .property-info {
+            padding: 25px;
+        }
+
+        .property-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .property-location {
+            color: #666;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .property-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .feature-tag {
+            background: #f0f0f0;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .property-footer {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .property-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .view-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-left: auto;
+        }
+
+        .view-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        /* 360 環景模態框 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            width: 90%;
+            max-width: 1200px;
+            height: 70vh;
+            position: relative;
+        }
+
+        .panorama {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            cursor: grab;
+            border-radius: 10px;
+        }
+
+        .panorama.dragging {
+            cursor: grabbing;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 36px;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .panorama-hint {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body class="theme-therapy">
+    <!-- 導航列 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span>🏠</span>
+                <span>JoyRental</span>
+            </div>
+            
+            <div class="nav-links">
+                <a href="#home">首頁</a>
+                <a href="#features">功能</a>
+                <a href="#properties">房源</a>
+                <a href="#about">關於</a>
+                
+                <div class="theme-switcher">
+                    <div class="theme-btn therapy active" onclick="changeTheme('therapy')" title="療癒系"></div>
+                    <div class="theme-btn healing" onclick="changeTheme('healing')" title="平安喜樂"></div>
+                    <div class="theme-btn custom" onclick="changeTheme('custom')" title="自訂"></div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄區塊 -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>🌟 平安喜樂 找到心靈的家</h1>
+            <p>AI智能配對 × 360°環景看房 × 社群互動評價</p>
+            
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="輸入地區、社區或關鍵字...">
+                <button class="search-btn">🔍 智能搜尋</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 功能展示 -->
+    <section class="features" id="features">
+        <h2 class="section-title">革命性功能</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🏡</div>
+                <h3>360°環景看房</h3>
+                <p>身臨其境的看房體驗，在家就能走遍每個角落</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3>AI智能配對</h3>
+                <p>根據您的生活習慣和偏好，推薦最適合的房源</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">👥</div>
+                <h3>社群真實評價</h3>
+                <p>住戶真實分享，讓您租房更安心</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🛡️</div>
+                <h3>智能防詐系統</h3>
+                <p>AI辨識可疑房源，保護您的權益</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🔧</div>
+                <h3>一站式維修</h3>
+                <p>線上報修、透明報價、品質保證</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>LINE整合</h3>
+                <p>訊息通知、線上簽約、便利溝通</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 房源展示 -->
+    <section class="properties" id="properties">
+        <div>
+            <h2 class="section-title">精選房源</h2>
+            <div class="property-grid" id="propertyGrid">
+                <!-- 房源卡片會動態載入 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 360環景模態框 -->
+    <div class="modal" id="panoramaModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+            <div class="panorama" id="panoramaView"></div>
+            <div class="panorama-hint">拖曳滑鼠以360°觀看</div>
+        </div>
+    </div>
+
+    <script>
+        // 房源資料
+        const properties = [
+            {
+                id: 1,
+                title: "陽光療癒套房",
+                location: "板橋區 幸福社區",
+                price: 15000,
+                image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800",
+                panorama: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=2000",
+                features: ["近捷運", "可養寵物", "陽台", "24小時管理"],
+                badge: "熱門"
+            },
+            {
+                id: 2,
+                title: "極簡風格公寓",
+                location: "信義區 都心首選",
+                price: 28000,
+                image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800",
+                panorama: "https://images.unsplash.com/photo-1600607687644-c7171b42498b?w=2000",
+                features: ["新裝潢", "健身房", "停車位", "智能家居"],
+                badge: "推薦"
+            },
+            {
+                id: 3,
+                title: "文青小屋",
+                location: "大安區 靜巷雅居",
+                price: 12000,
+                image: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800",
+                panorama: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=2000",
+                features: ["採光佳", "近咖啡廳", "安靜", "書香氣息"],
+                badge: "新上架"
+            },
+            {
+                id: 4,
+                title: "河景豪宅",
+                location: "新店區 水岸第一排",
+                price: 35000,
+                image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800",
+                panorama: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=2000",
+                features: ["景觀陽台", "管家服務", "酒窖", "私人電梯"],
+                badge: "豪華"
+            },
+            {
+                id: 5,
+                title: "學生優質雅房",
+                location: "文山區 大學城",
+                price: 6500,
+                image: "https://images.unsplash.com/photo-1630699375896-63ee5fe7b73c?w=800",
+                panorama: "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?w=2000",
+                features: ["含水電", "網路", "洗衣機", "近學校"],
+                badge: "CP值"
+            },
+            {
+                id: 6,
+                title: "創業家工作室",
+                location: "松山區 創新基地",
+                price: 20000,
+                image: "https://images.unsplash.com/photo-1527359443443-84a48aec73d2?w=800",
+                panorama: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=2000",
+                features: ["可商用", "會議室", "高速網路", "24H進出"],
+                badge: "商用"
+            }
+        ];
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProperties();
+            initPanorama();
+        });
+
+        // 載入房源
+        function loadProperties() {
+            const grid = document.getElementById('propertyGrid');
+            grid.innerHTML = properties.map(property => `
+                <div class="property-card">
+                    <div class="property-image" style="background-image: url('${property.image}')">
+                        <span class="property-badge">${property.badge}</span>
+                        <span class="view-360" onclick="open360(${property.id})">
+                            📷 360°
+                        </span>
+                    </div>
+                    <div class="property-info">
+                        <h3 class="property-title">${property.title}</h3>
+                        <div class="property-location">
+                            📍 ${property.location}
+                        </div>
+                        <div class="property-features">
+                            ${property.features.map(f => `<span class="feature-tag">${f}</span>`).join('')}
+                        </div>
+                        <div class="property-footer">
+                            <span class="property-price">$${property.price.toLocaleString()}/月</span>
+                            <button class="view-btn">查看詳情</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 主題切換
+        function changeTheme(theme) {
+            document.body.className = `theme-${theme}`;
+            
+            // 更新按鈕狀態
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`.theme-btn.${theme}`).classList.add('active');
+        }
+
+        // 360環景
+        let currentProperty = null;
+        let isDragging = false;
+        let startX = 0;
+        let scrollLeft = 0;
+
+        function open360(propertyId) {
+            currentProperty = properties.find(p => p.id === propertyId);
+            const modal = document.getElementById('panoramaModal');
+            const panoramaView = document.getElementById('panoramaView');
+            
+            panoramaView.style.backgroundImage = `url('${currentProperty.panorama}')`;
+            panoramaView.style.backgroundSize = '200% auto';
+            panoramaView.style.backgroundPosition = '0 center';
+            
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('panoramaModal').classList.remove('active');
+        }
+
+        function initPanorama() {
+            const panoramaView = document.getElementById('panoramaView');
+            
+            panoramaView.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                panoramaView.classList.add('dragging');
+                startX = e.pageX;
+                scrollLeft = parseInt(panoramaView.style.backgroundPosition) || 0;
+            });
+
+            panoramaView.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+                const x = e.pageX;
+                const walk = (x - startX) * 0.5;
+                panoramaView.style.backgroundPosition = `${scrollLeft + walk}px center`;
+            });
+
+            panoramaView.addEventListener('mouseup', () => {
+                isDragging = false;
+                panoramaView.classList.remove('dragging');
+            });
+
+            panoramaView.addEventListener('mouseleave', () => {
+                isDragging = false;
+                panoramaView.classList.remove('dragging');
+            });
+        }
+
+        // ESC 關閉模態框
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
