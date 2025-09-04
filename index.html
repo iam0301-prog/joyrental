@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JoyRental - 療癒系智能租屋平台</title>
     <style>
-        /* 基礎設定 */
         * {
             margin: 0;
             padding: 0;
@@ -43,7 +42,7 @@
             --filter-bg: #FFF9F2;
         }
 
-        /* 自訂模式 - 可選配色 */
+        /* 自訂模式 */
         body.theme-custom {
             --bg-main: var(--custom-bg, #F0F8FF);
             --primary: var(--custom-primary, #4A90E2);
@@ -56,7 +55,6 @@
             --filter-bg: #F8FBFF;
         }
 
-        /* 字體大小設定 */
         body.font-small { font-size: 14px; }
         body.font-normal { font-size: 16px; }
         body.font-large { font-size: 18px; }
@@ -65,6 +63,61 @@
         body {
             background-color: var(--bg-main);
             color: var(--text-primary);
+        }
+
+        /* 載入畫面 */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #FF8C42 0%, #FFD23F 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeOut 0.5s ease 2s forwards;
+        }
+
+        .splash-content {
+            text-align: center;
+            color: white;
+            animation: fadeIn 1s ease;
+        }
+
+        .splash-chinese {
+            font-size: 72px;
+            font-weight: 300;
+            margin-bottom: 10px;
+            letter-spacing: 10px;
+        }
+
+        .splash-english {
+            font-size: 20px;
+            letter-spacing: 8px;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .splash-brand {
+            font-size: 42px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            to { 
+                opacity: 0;
+                visibility: hidden;
+                display: none;
+            }
         }
 
         /* 導航列 */
@@ -111,160 +164,34 @@
             color: var(--accent);
         }
 
-        /* 設定面板 */
-        .settings-panel {
-            position: fixed;
-            right: -400px;
-            top: 0;
-            width: 400px;
-            height: 100vh;
-            background: var(--card-bg);
-            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-            transition: right 0.3s ease;
-            z-index: 2001;
-            overflow-y: auto;
-        }
-
-        .settings-panel.open {
-            right: 0;
-        }
-
-        .settings-header {
-            padding: 20px;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--primary);
-            color: white;
-        }
-
-        .settings-content {
-            padding: 20px;
-        }
-
-        .settings-section {
-            margin-bottom: 30px;
-        }
-
-        .settings-section h3 {
-            margin-bottom: 15px;
-            color: var(--text-primary);
-        }
-
-        .theme-options {
+        /* 主題切換按鈕 */
+        .theme-switcher {
             display: flex;
             gap: 10px;
-            margin-bottom: 20px;
+            align-items: center;
         }
 
         .theme-btn {
-            padding: 10px 20px;
-            border: 2px solid var(--primary);
-            background: var(--card-bg);
-            color: var(--text-primary);
-            border-radius: 8px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid transparent;
             cursor: pointer;
             transition: all 0.3s;
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.1);
         }
 
         .theme-btn.active {
-            background: var(--primary);
-            color: white;
+            border-color: #333;
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.1);
         }
 
-        /* 自訂顏色選擇器 */
-        .color-picker {
-            display: none;
-            margin-top: 15px;
-            padding: 15px;
-            background: var(--filter-bg);
-            border-radius: 8px;
-        }
-
-        .color-picker.show {
-            display: block;
-        }
-
-        .color-option {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .color-option label {
-            width: 120px;
-            color: var(--text-secondary);
-        }
-
-        .color-option input[type="color"] {
-            width: 50px;
-            height: 35px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        /* 字體大小選擇 */
-        .font-size-options {
-            display: flex;
-            gap: 10px;
-        }
-
-        .font-btn {
-            padding: 8px 16px;
-            border: 1px solid var(--primary);
-            background: var(--card-bg);
-            color: var(--text-primary);
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .font-btn.active {
-            background: var(--primary);
-            color: white;
-        }
-
-        /* 語言選擇 */
-        .language-select {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .lang-btn {
-            padding: 8px 16px;
-            border: 1px solid var(--primary);
-            background: var(--card-bg);
-            color: var(--text-primary);
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .lang-btn.active {
-            background: var(--primary);
-            color: white;
-        }
-
-px;
-            background: var(--primary);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-            z-index: 1999;
-            font-size: 24px;
-            transition: transform 0.3s;
-        }
-
-        .settings-toggle:hover {
-            transform: scale(1.1);
-        }
+        .theme-btn.professional { background: linear-gradient(135deg, #2C3E50, #E74C3C); }
+        .theme-btn.healing { background: linear-gradient(135deg, #FF8C42, #FFB347); }
+        .theme-btn.custom { background: linear-gradient(135deg, #4A90E2, #7B68EE); }
 
         /* 英雄區塊 */
         .hero {
@@ -274,21 +201,6 @@ px;
             text-align: center;
             position: relative;
             overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: rotate 30s linear infinite;
-        }
-
-        @keyframes rotate {
-            100% { transform: rotate(360deg); }
         }
 
         .hero-content {
@@ -301,28 +213,15 @@ px;
         .hero h1 {
             font-size: 48px;
             margin-bottom: 20px;
-            animation: fadeInUp 1s ease;
         }
 
         .hero p {
             font-size: 20px;
             margin-bottom: 30px;
             opacity: 0.95;
-            animation: fadeInUp 1s ease 0.2s both;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* 搜尋與篩選區域 */
+        /* 搜尋與篩選容器 */
         .search-filter-container {
             background: var(--card-bg);
             border-radius: 20px;
@@ -364,10 +263,10 @@ px;
             transform: scale(1.05);
         }
 
-        /* 篩選器 */
+        /* 篩選器 - 沒有樓層！ */
         .filter-section {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 20px;
             margin-top: 20px;
         }
@@ -399,210 +298,105 @@ px;
             border-color: var(--primary);
         }
 
-        .filter-input {
-            padding: 10px 15px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            background: var(--filter-bg);
-            color: var(--text-primary);
-            outline: none;
-            transition: all 0.3s;
-        }
-
-        .filter-input:hover, .filter-input:focus {
-            border-color: var(--primary);
-        }
-
         /* 快速標籤 */
         .quick-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
             margin-top: 20px;
             padding-top: 20px;
             border-top: 1px solid #eee;
         }
 
+        .tag-group {
+            margin-bottom: 15px;
+        }
+
+        .tag-label {
+            display: inline-block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-right: 10px;
+            min-width: 80px;
+        }
+
         .tag-btn {
             background: var(--filter-bg);
-            border: 1px solid var(--primary);
-            padding: 8px 16px;
+            border: 1px solid #ddd;
+            padding: 6px 12px;
             border-radius: 20px;
             cursor: pointer;
             transition: all 0.3s;
             color: var(--text-primary);
-            font-size: 14px;
+            font-size: 13px;
+            margin: 3px;
         }
 
         .tag-btn:hover {
             background: var(--primary);
             color: white;
+            border-color: var(--primary);
         }
 
         .tag-btn.active {
             background: var(--primary);
             color: white;
+            border-color: var(--primary);
         }
 
-        /* 功能卡片 */
+        /* 功能展示 - 超級精簡 */
         .features {
-            padding: 80px 20px;
+            padding: 30px 10px;
             max-width: 1200px;
             margin: 0 auto;
         }
 
         .section-title {
             text-align: center;
-            font-size: 36px;
-            margin-bottom: 50px;
+            font-size: 24px;
+            margin-bottom: 20px;
             color: var(--text-primary);
         }
 
         .feature-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
         }
 
         .feature-card {
             background: var(--card-bg);
-            border-radius: 20px;
-            padding: 30px;
+            border-radius: 10px;
+            padding: 15px 10px;
             text-align: center;
-            box-shadow: var(--card-shadow);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             transition: all 0.3s;
         }
 
         .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.12);
         }
 
         .feature-icon {
-            width: 80px;
-            height: 80px;
-            background: var(--bg-gradient);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 36px;
-        }
-
-        /* 一站式服務區塊 */
-        .one-stop-service {
-            background: linear-gradient(135deg, var(--filter-bg), var(--bg-main));
-            padding: 60px 20px;
-            margin-top: 40px;
-        }
-
-        .service-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-subtitle {
-            text-align: center;
-            color: var(--text-secondary);
-            margin-top: -10px;
-            margin-bottom: 40px;
-        }
-
-        /* 服務流程時間軸 */
-        .service-timeline {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 50px;
-            position: relative;
-            padding: 0 20px;
-        }
-
-        .service-timeline::before {
-            content: '';
-            position: absolute;
-            top: 25px;
-            left: 10%;
-            right: 10%;
-            height: 2px;
-            background: var(--primary);
-            opacity: 0.3;
-        }
-
-        .timeline-item {
-            flex: 1;
-            text-align: center;
-            position: relative;
-        }
-
-        .timeline-number {
-            width: 50px;
-            height: 50px;
-            background: var(--primary);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px;
-            font-size: 20px;
-            font-weight: bold;
-            position: relative;
-            z-index: 1;
-        }
-
-        .timeline-content h3 {
-            font-size: 16px;
+            font-size: 24px;
             margin-bottom: 5px;
-            color: var(--text-primary);
         }
 
-        .timeline-content p {
+        .feature-card h3 {
             font-size: 12px;
+            margin-bottom: 3px;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            font-size: 10px;
             color: var(--text-secondary);
+            line-height: 1.2;
         }
 
-        /* 服務特色卡片 */
-        .service-features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 20px;
-        }
-
-        .service-card {
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
-            transition: all 0.3s;
-        }
-
-        .service-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-        }
-
-        .service-icon {
-            font-size: 36px;
-            margin-bottom: 10px;
-        }
-
-        .service-card h4 {
-            font-size: 16px;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
-
-        .service-card p {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        /* 房源卡片 */
+        /* 房源展示 */
         .properties {
             background: var(--bg-main);
-            padding: 80px 20px;
+            padding: 60px 20px;
         }
 
         .property-grid {
@@ -611,7 +405,7 @@ px;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 30px;
-            margin-top: 50px;
+            margin-top: 40px;
         }
 
         .property-card {
@@ -678,9 +472,6 @@ px;
         .property-location {
             color: var(--text-secondary);
             margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
         }
 
         .property-features {
@@ -727,7 +518,7 @@ px;
             transform: scale(1.05);
         }
 
-        /* 360 環景模態框 */
+        /* 360環景模態框 */
         .modal {
             display: none;
             position: fixed;
@@ -761,10 +552,6 @@ px;
             border-radius: 10px;
         }
 
-        .panorama.dragging {
-            cursor: grabbing;
-        }
-
         .close-modal {
             position: absolute;
             top: -40px;
@@ -776,27 +563,13 @@ px;
             border: none;
         }
 
-        .panorama-hint {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.7);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 20px;
-        }
-
-        /* 響應式設計 */
         @media (max-width: 768px) {
             .filter-section {
                 grid-template-columns: 1fr;
             }
-            
-            .search-box {
-                flex-direction: column;
+            .feature-grid {
+                grid-template-columns: repeat(3, 1fr);
             }
-            
             .property-grid {
                 grid-template-columns: 1fr;
             }
@@ -804,382 +577,190 @@ px;
     </style>
 </head>
 <body class="theme-professional font-normal">
+    <!-- 載入畫面 -->
+    <div class="splash-screen" id="splashScreen">
+        <div class="splash-content">
+            <div class="splash-chinese">平安</div>
+            <div class="splash-english">PEACE</div>
+            <div style="width: 100px; height: 2px; background: white; margin: 20px auto;"></div>
+            <div class="splash-chinese">喜樂</div>
+            <div class="splash-english">JOY</div>
+            <div class="splash-brand">JoyRental</div>
+        </div>
+    </div>
+
     <!-- 導航列 -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="logo">
                 <span>🏠</span>
-                <span class="logo-text">JoyRental</span>
+                <span>JoyRental</span>
             </div>
             
             <div class="nav-links">
-                <a href="#home" class="nav-home">首頁</a>
-                <a href="#features" class="nav-features">功能</a>
-                <a href="#properties" class="nav-properties">房源</a>
-                <a href="#about" class="nav-about">關於</a>
+                <a href="#home">首頁</a>
+                <a href="#features">功能</a>
+                <a href="#properties">房源</a>
+                <a href="#about">關於</a>
+                
+                <!-- 主題切換按鈕 -->
+                <div class="theme-switcher">
+                    <button class="theme-btn professional active" onclick="setTheme('professional')" title="專業"></button>
+                    <button class="theme-btn healing" onclick="setTheme('healing')" title="療癒"></button>
+                    <button class="theme-btn custom" onclick="setTheme('custom')" title="自訂"></button>
+                </div>
             </div>
         </div>
     </nav>
 
-    <!-- 設定按鈕 -->
-    <div class="settings-toggle" onclick="toggleSettings()">⚙️</div>
-
-    <!-- 設定面板 -->
-    <div class="settings-panel" id="settingsPanel">
-        <div class="settings-header">
-            <h2>個人化設定</h2>
-            <button onclick="toggleSettings()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: white;">✕</button>
-        </div>
-        
-        <div class="settings-content">
-            <!-- 主題選擇 -->
-            <div class="settings-section">
-                <h3>主題模式</h3>
-                <div class="theme-options">
-                    <button class="theme-btn active" onclick="setTheme('professional', this)">專業</button>
-                    <button class="theme-btn" onclick="setTheme('healing', this)">療癒</button>
-                    <button class="theme-btn" onclick="setTheme('custom', this)">自訂</button>
-                </div>
-                
-                <!-- 自訂顏色選擇器 -->
-                <div class="color-picker" id="colorPicker">
-                    <div class="color-option">
-                        <label>背景色：</label>
-                        <input type="color" id="customBg" value="#F0F8FF" onchange="updateCustomTheme()">
-                    </div>
-                    <div class="color-option">
-                        <label>主色調：</label>
-                        <input type="color" id="customPrimary" value="#4A90E2" onchange="updateCustomTheme()">
-                    </div>
-                    <div class="color-option">
-                        <label>強調色：</label>
-                        <input type="color" id="customAccent" value="#7B68EE" onchange="updateCustomTheme()">
-                    </div>
-                    <div class="color-option">
-                        <label>文字色：</label>
-                        <input type="color" id="customText" value="#333333" onchange="updateCustomTheme()">
-                    </div>
-                </div>
-            </div>
-
-            <!-- 字體大小 -->
-            <div class="settings-section">
-                <h3>字體大小</h3>
-                <div class="font-size-options">
-                    <button class="font-btn" onclick="setFontSize('small', this)">小</button>
-                    <button class="font-btn active" onclick="setFontSize('normal', this)">標準</button>
-                    <button class="font-btn" onclick="setFontSize('large', this)">大</button>
-                    <button class="font-btn" onclick="setFontSize('xlarge', this)">特大</button>
-                </div>
-            </div>
-
-            <!-- 語言選擇 -->
-            <div class="settings-section">
-                <h3>語言 Language</h3>
-                <div class="language-select">
-                    <button class="lang-btn active" onclick="setLanguage('zh-TW', this)">繁體中文</button>
-                    <button class="lang-btn" onclick="setLanguage('zh-CN', this)">简体中文</button>
-                    <button class="lang-btn" onclick="setLanguage('en', this)">English</button>
-                    <button class="lang-btn" onclick="setLanguage('ja', this)">日本語</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- 英雄區塊 -->
     <section class="hero" id="home">
         <div class="hero-content">
-            <h1 class="hero-title">🌟 平安喜樂 找到心靈的家</h1>
-            <p class="hero-subtitle">AI智能配對 × 360°環景看房 × 社群互動評價</p>
+            <h1>🌟 平安喜樂 找到心靈的家</h1>
+            <p>AI智能配對 × 360°環景看房 × 社群互動評價</p>
             
-            <!-- 搜尋與篩選容器 -->
+            <!-- 搜尋與篩選 -->
             <div class="search-filter-container">
                 <div class="search-box">
                     <input type="text" class="search-input" placeholder="輸入地區、社區或關鍵字...">
                     <button class="search-btn">🔍 智能搜尋</button>
                 </div>
                 
-                <!-- 篩選器區域 -->
+                <!-- 篩選器（沒有樓層！） -->
                 <div class="filter-section">
                     <div class="filter-group">
                         <label class="filter-label">地區</label>
-                        <select class="filter-select" id="districtSelect">
-                            <option value="">所有地區</option>
-                            <option value="中正區">中正區</option>
-                            <option value="大同區">大同區</option>
-                            <option value="中山區">中山區</option>
-                            <option value="松山區">松山區</option>
-                            <option value="大安區">大安區</option>
-                            <option value="萬華區">萬華區</option>
-                            <option value="信義區">信義區</option>
-                            <option value="士林區">士林區</option>
-                            <option value="北投區">北投區</option>
-                            <option value="內湖區">內湖區</option>
-                            <option value="南港區">南港區</option>
-                            <option value="文山區">文山區</option>
-                            <option value="板橋區">板橋區</option>
-                            <option value="三重區">三重區</option>
-                            <option value="中和區">中和區</option>
-                            <option value="永和區">永和區</option>
-                            <option value="新莊區">新莊區</option>
-                            <option value="新店區">新店區</option>
-                            <option value="土城區">土城區</option>
-                            <option value="蘆洲區">蘆洲區</option>
-                            <option value="汐止區">汐止區</option>
-                            <option value="三峽區">三峽區</option>
-                            <option value="淡水區">淡水區</option>
-                            <option value="林口區">林口區</option>
+                        <select class="filter-select">
+                            <option>所有地區</option>
+                            <option>中正區</option>
+                            <option>大安區</option>
+                            <option>信義區</option>
+                            <option>板橋區</option>
+                            <option>新店區</option>
                         </select>
                     </div>
                     
                     <div class="filter-group">
                         <label class="filter-label">捷運站</label>
-                        <select class="filter-select" id="mrtSelect">
-                            <option value="">所有捷運站</option>
-                            <optgroup label="淡水信義線">
-                                <option value="淡水站">淡水站</option>
-                                <option value="紅樹林站">紅樹林站</option>
-                                <option value="竹圍站">竹圍站</option>
-                                <option value="關渡站">關渡站</option>
-                                <option value="忠義站">忠義站</option>
-                                <option value="復興崗站">復興崗站</option>
-                                <option value="北投站">北投站</option>
-                                <option value="士林站">士林站</option>
-                                <option value="劍潭站">劍潭站</option>
-                                <option value="圓山站">圓山站</option>
-                                <option value="民權西路站">民權西路站</option>
-                                <option value="雙連站">雙連站</option>
-                                <option value="中山站">中山站</option>
-                                <option value="台北車站">台北車站</option>
-                                <option value="台大醫院站">台大醫院站</option>
-                                <option value="中正紀念堂站">中正紀念堂站</option>
-                                <option value="東門站">東門站</option>
-                                <option value="大安森林公園站">大安森林公園站</option>
-                                <option value="大安站">大安站</option>
-                                <option value="信義安和站">信義安和站</option>
-                                <option value="台北101站">台北101站</option>
-                                <option value="象山站">象山站</option>
-                            </optgroup>
-                            <optgroup label="板南線">
-                                <option value="頂埔站">頂埔站</option>
-                                <option value="永寧站">永寧站</option>
-                                <option value="土城站">土城站</option>
-                                <option value="海山站">海山站</option>
-                                <option value="亞東醫院站">亞東醫院站</option>
-                                <option value="府中站">府中站</option>
-                                <option value="板橋站">板橋站</option>
-                                <option value="新埔站">新埔站</option>
-                                <option value="江子翠站">江子翠站</option>
-                                <option value="龍山寺站">龍山寺站</option>
-                                <option value="西門站">西門站</option>
-                                <option value="善導寺站">善導寺站</option>
-                                <option value="忠孝新生站">忠孝新生站</option>
-                                <option value="忠孝復興站">忠孝復興站</option>
-                                <option value="忠孝敦化站">忠孝敦化站</option>
-                                <option value="國父紀念館站">國父紀念館站</option>
-                                <option value="市政府站">市政府站</option>
-                                <option value="永春站">永春站</option>
-                                <option value="後山埤站">後山埤站</option>
-                                <option value="昆陽站">昆陽站</option>
-                                <option value="南港站">南港站</option>
-                                <option value="南港展覽館站">南港展覽館站</option>
-                            </optgroup>
-                            <optgroup label="松山新店線">
-                                <option value="松山站">松山站</option>
-                                <option value="南京三民站">南京三民站</option>
-                                <option value="台北小巨蛋站">台北小巨蛋站</option>
-                                <option value="南京復興站">南京復興站</option>
-                                <option value="中山站">中山站</option>
-                                <option value="北門站">北門站</option>
-                                <option value="小南門站">小南門站</option>
-                                <option value="古亭站">古亭站</option>
-                                <option value="台電大樓站">台電大樓站</option>
-                                <option value="公館站">公館站</option>
-                                <option value="萬隆站">萬隆站</option>
-                                <option value="景美站">景美站</option>
-                                <option value="大坪林站">大坪林站</option>
-                                <option value="七張站">七張站</option>
-                                <option value="新店區公所站">新店區公所站</option>
-                                <option value="新店站">新店站</option>
-                            </optgroup>
-                            <optgroup label="中和新蘆線">
-                                <option value="蘆洲站">蘆洲站</option>
-                                <option value="三民高中站">三民高中站</option>
-                                <option value="徐匯中學站">徐匯中學站</option>
-                                <option value="三和國中站">三和國中站</option>
-                                <option value="三重國小站">三重國小站</option>
-                                <option value="迴龍站">迴龍站</option>
-                                <option value="丹鳳站">丹鳳站</option>
-                                <option value="輔大站">輔大站</option>
-                                <option value="新莊站">新莊站</option>
-                                <option value="頭前庄站">頭前庄站</option>
-                                <option value="先嗇宮站">先嗇宮站</option>
-                                <option value="三重站">三重站</option>
-                                <option value="菜寮站">菜寮站</option>
-                                <option value="大橋頭站">大橋頭站</option>
-                                <option value="行天宮站">行天宮站</option>
-                                <option value="東門站">東門站</option>
-                                <option value="古亭站">古亭站</option>
-                                <option value="頂溪站">頂溪站</option>
-                                <option value="永安市場站">永安市場站</option>
-                                <option value="景安站">景安站</option>
-                                <option value="南勢角站">南勢角站</option>
-                            </optgroup>
-                            <optgroup label="文湖線">
-                                <option value="南港展覽館站">南港展覽館站</option>
-                                <option value="南港軟體園區站">南港軟體園區站</option>
-                                <option value="東湖站">東湖站</option>
-                                <option value="葫洲站">葫洲站</option>
-                                <option value="大湖公園站">大湖公園站</option>
-                                <option value="內湖站">內湖站</option>
-                                <option value="文德站">文德站</option>
-                                <option value="港墘站">港墘站</option>
-                                <option value="西湖站">西湖站</option>
-                                <option value="劍南路站">劍南路站</option>
-                                <option value="大直站">大直站</option>
-                                <option value="松山機場站">松山機場站</option>
-                                <option value="中山國中站">中山國中站</option>
-                                <option value="南京復興站">南京復興站</option>
-                                <option value="忠孝復興站">忠孝復興站</option>
-                                <option value="大安站">大安站</option>
-                                <option value="科技大樓站">科技大樓站</option>
-                                <option value="六張犁站">六張犁站</option>
-                                <option value="麟光站">麟光站</option>
-                                <option value="辛亥站">辛亥站</option>
-                                <option value="萬芳醫院站">萬芳醫院站</option>
-                                <option value="萬芳社區站">萬芳社區站</option>
-                                <option value="木柵站">木柵站</option>
-                                <option value="動物園站">動物園站</option>
-                            </optgroup>
+                        <select class="filter-select">
+                            <option>所有捷運站</option>
+                            <option>台北車站</option>
+                            <option>市政府站</option>
+                            <option>板橋站</option>
+                            <option>古亭站</option>
                         </select>
                     </div>
                     
                     <div class="filter-group">
                         <label class="filter-label">租金範圍</label>
-                        <select class="filter-select" id="priceRange">
-                            <option value="">不限</option>
-                            <option value="0-5000">5,000以下</option>
-                            <option value="5000-10000">5,000-10,000</option>
-                            <option value="10000-15000">10,000-15,000</option>
-                            <option value="15000-20000">15,000-20,000</option>
-                            <option value="20000-25000">20,000-25,000</option>
-                            <option value="25000-30000">25,000-30,000</option>
-                            <option value="30000-40000">30,000-40,000</option>
-                            <option value="40000-50000">40,000-50,000</option>
-                            <option value="50000+">50,000以上</option>
+                        <select class="filter-select">
+                            <option>不限</option>
+                            <option>10,000以下</option>
+                            <option>10,000-20,000</option>
+                            <option>20,000-30,000</option>
+                            <option>30,000以上</option>
                         </select>
                     </div>
                     
                     <div class="filter-group">
                         <label class="filter-label">房型</label>
-                        <select class="filter-select" id="roomType">
-                            <option value="">不限</option>
-                            <option value="套房">套房</option>
-                            <option value="雅房">雅房</option>
-                            <option value="整層住家">整層住家</option>
-                            <option value="獨立套房">獨立套房</option>
-                            <option value="分租套房">分租套房</option>
-                            <option value="1房">1房</option>
-                            <option value="2房">2房</option>
-                            <option value="3房">3房</option>
-                            <option value="4房以上">4房以上</option>
+                        <select class="filter-select">
+                            <option>不限</option>
+                            <option>套房</option>
+                            <option>雅房</option>
+                            <option>整層</option>
+                            <option>1房</option>
+                            <option>2房</option>
+                            <option>3房</option>
                         </select>
                     </div>
                     
                     <div class="filter-group">
                         <label class="filter-label">坪數</label>
-                        <select class="filter-select" id="areaRange">
-                            <option value="">不限</option>
-                            <option value="0-10">10坪以下</option>
-                            <option value="10-20">10-20坪</option>
-                            <option value="20-30">20-30坪</option>
-                            <option value="30-40">30-40坪</option>
-                            <option value="40-50">40-50坪</option>
-                            <option value="50+">50坪以上</option>
-                        </select>
-                    </div>
-                    
-                    <div class="filter-group">
-                        <label class="filter-label">樓層</label>
-                        <select class="filter-select" id="floorSelect">
-                            <option value="">不限</option>
-                            <option value="1">1樓</option>
-                            <option value="2-5">2-5樓</option>
-                            <option value="6-10">6-10樓</option>
-                            <option value="11-15">11-15樓</option>
-                            <option value="16+">16樓以上</option>
-                            <option value="頂樓">頂樓</option>
+                        <select class="filter-select">
+                            <option>不限</option>
+                            <option>10坪以下</option>
+                            <option>10-20坪</option>
+                            <option>20-30坪</option>
+                            <option>30坪以上</option>
                         </select>
                     </div>
                 </div>
                 
                 <!-- 快速標籤 -->
                 <div class="quick-tags">
-                    <button class="tag-btn" onclick="toggleTag(this)">近捷運5分鐘</button>
-                    <button class="tag-btn" onclick="toggleTag(this)">可養寵物</button>
-                    <button class="tag-btn" onclick="toggleTag(this)">含車位</button>
-                    <button class="tag-btn" onclick="toggleTag(this)">新裝潢</button>
-                    <button class="tag-btn" onclick="toggleTag(this)">可開伙</button>
-                    <button class="tag-btn" onclick="toggleTag(this)">陽台</button>
-                    <button class="tag-btn" onclick="toggleTag(this)">電梯大樓</button>
-                    <button class="tag-btn" onclick="toggleTag(this)">管理室</button>
-                    <button class="tag-btn" onclick="toggleTag(this)">垃圾代收</button>
-                    <button class="tag-btn" onclick="toggleTag(this)">含家具</button>
+                    <div class="tag-group">
+                        <span class="tag-label">設備：</span>
+                        <button class="tag-btn" onclick="toggleTag(this)">可開伙</button>
+                        <button class="tag-btn" onclick="toggleTag(this)">可養寵物</button>
+                        <button class="tag-btn" onclick="toggleTag(this)">含車位</button>
+                        <button class="tag-btn" onclick="toggleTag(this)">陽台</button>
+                        <button class="tag-btn" onclick="toggleTag(this)">電梯</button>
+                        <button class="tag-btn" onclick="toggleTag(this)">洗衣機</button>
+                        <button class="tag-btn" onclick="toggleTag(this)">冷氣</button>
+                        <button class="tag-btn" onclick="toggleTag(this)">新裝潢</button>
+                    </div>
+                    
+                    <div class="tag-group">
+                        <span class="tag-label">條件：</span>
+                        <button class="tag-btn" onclick="toggleTag(this)">近捷運5分鐘</button>
+                        <button class="tag-btn" onclick="toggleTag(this)">近學校</button>
+                        <button class="tag-btn" onclick="toggleTag(this)">近市場</button>
+                        <button class="tag-btn" onclick="toggleTag(this)">管理室</button>
+                        <button class="tag-btn" onclick="toggleTag(this)">垃圾代收</button>
+                        <button class="tag-btn" onclick="toggleTag(this)">含水電</button>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 功能展示 -->
+    <!-- 功能展示（超精簡） -->
     <section class="features" id="features">
-        <h2 class="section-title feature-title">革命性功能</h2>
+        <h2 class="section-title">革命性功能</h2>
         <div class="feature-grid">
             <div class="feature-card">
                 <div class="feature-icon">🏡</div>
-                <h3 class="feature-name">360°環景看房</h3>
-                <p class="feature-desc">身臨其境的看房體驗，在家就能走遍每個角落</p>
+                <h3>360°環景</h3>
+                <p>身臨其境看房</p>
             </div>
             
             <div class="feature-card">
                 <div class="feature-icon">🤖</div>
-                <h3 class="feature-name">AI智能配對</h3>
-                <p class="feature-desc">根據您的生活習慣和偏好，推薦最適合的房源</p>
+                <h3>AI配對</h3>
+                <p>智能推薦</p>
             </div>
             
             <div class="feature-card">
                 <div class="feature-icon">👥</div>
-                <h3 class="feature-name">社群真實評價</h3>
-                <p class="feature-desc">住戶真實分享，讓您租房更安心</p>
+                <h3>社群評價</h3>
+                <p>真實分享</p>
             </div>
             
             <div class="feature-card">
                 <div class="feature-icon">🛡️</div>
-                <h3 class="feature-name">智能防詐系統</h3>
-                <p class="feature-desc">AI辨識可疑房源，保護您的權益</p>
+                <h3>防詐系統</h3>
+                <p>安全保障</p>
             </div>
             
             <div class="feature-card">
                 <div class="feature-icon">🔧</div>
-                <h3 class="feature-name">一站式維修</h3>
-                <p class="feature-desc">線上報修、透明報價、品質保證</p>
+                <h3>維修服務</h3>
+                <p>一站解決</p>
             </div>
             
             <div class="feature-card">
                 <div class="feature-icon">📱</div>
-                <h3 class="feature-name">LINE整合</h3>
-                <p class="feature-desc">訊息通知、線上簽約、便利溝通</p>
+                <h3>LINE整合</h3>
+                <p>便利溝通</p>
             </div>
         </div>
     </section>
 
     <!-- 房源展示 -->
     <section class="properties" id="properties">
-        <div>
-            <h2 class="section-title property-title">精選房源</h2>
-            <div class="property-grid" id="propertyGrid">
-                <!-- 房源卡片會動態載入 -->
-            </div>
-        </div>
+        <h2 class="section-title">精選房源</h2>
+        <div class="property-grid" id="propertyGrid"></div>
     </section>
 
     <!-- 360環景模態框 -->
@@ -1187,270 +768,43 @@ px;
         <div class="modal-content">
             <button class="close-modal" onclick="closeModal()">&times;</button>
             <div class="panorama" id="panoramaView"></div>
-            <div class="panorama-hint">拖曳滑鼠以360°觀看</div>
         </div>
     </div>
 
     <script>
-        // 房源資料（增加更多詳細資訊）
+        // 房源資料
         const properties = [
             {
                 id: 1,
                 title: "陽光療癒套房",
-                district: "板橋區",
-                mrt: "板橋站",
                 location: "板橋區 幸福社區",
                 price: 15000,
-                area: 18,
-                floor: 5,
-                roomType: "套房",
                 image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800",
                 panorama: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=2000",
-                features: ["近捷運", "可養寵物", "陽台", "24小時管理"],
+                features: ["近捷運", "可養寵物", "陽台", "管理室"],
                 badge: "熱門"
             },
             {
                 id: 2,
                 title: "極簡風格公寓",
-                district: "信義區",
-                mrt: "市政府站",
                 location: "信義區 都心首選",
                 price: 28000,
-                area: 35,
-                floor: 12,
-                roomType: "2房",
                 image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800",
                 panorama: "https://images.unsplash.com/photo-1600607687644-c7171b42498b?w=2000",
-                features: ["新裝潢", "健身房", "停車位", "智能家居"],
+                features: ["新裝潢", "健身房", "停車位", "電梯"],
                 badge: "推薦"
             },
             {
                 id: 3,
                 title: "文青小屋",
-                district: "大安區",
-                mrt: "古亭站",
                 location: "大安區 靜巷雅居",
                 price: 12000,
-                area: 15,
-                floor: 3,
-                roomType: "雅房",
                 image: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800",
                 panorama: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=2000",
-                features: ["採光佳", "近咖啡廳", "安靜", "書香氣息"],
+                features: ["採光佳", "近咖啡廳", "安靜", "可開伙"],
                 badge: "新上架"
-            },
-            {
-                id: 4,
-                title: "河景豪宅",
-                district: "新店區",
-                mrt: "新店站",
-                location: "新店區 水岸第一排",
-                price: 35000,
-                area: 55,
-                floor: 18,
-                roomType: "3房",
-                image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800",
-                panorama: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=2000",
-                features: ["景觀陽台", "管家服務", "酒窖", "私人電梯"],
-                badge: "豪華"
-            },
-            {
-                id: 5,
-                title: "學生優質雅房",
-                district: "文山區",
-                mrt: "公館站",
-                location: "文山區 大學城",
-                price: 6500,
-                area: 8,
-                floor: 2,
-                roomType: "雅房",
-                image: "https://images.unsplash.com/photo-1630699375896-63ee5fe7b73c?w=800",
-                panorama: "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?w=2000",
-                features: ["含水電", "網路", "洗衣機", "近學校"],
-                badge: "CP值"
-            },
-            {
-                id: 6,
-                title: "創業家工作室",
-                district: "松山區",
-                mrt: "南京復興站",
-                location: "松山區 創新基地",
-                price: 20000,
-                area: 25,
-                floor: 7,
-                roomType: "套房",
-                image: "https://images.unsplash.com/photo-1527359443443-84a48aec73d2?w=800",
-                panorama: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=2000",
-                features: ["可商用", "會議室", "高速網路", "24H進出"],
-                badge: "商用"
-            },
-            {
-                id: 7,
-                title: "北歐風格套房",
-                district: "中山區",
-                mrt: "中山站",
-                location: "中山區 時尚生活圈",
-                price: 18000,
-                area: 20,
-                floor: 8,
-                roomType: "套房",
-                image: "https://images.unsplash.com/photo-1505693314120-0d443867891c?w=800",
-                panorama: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=2000",
-                features: ["全新裝潢", "獨立洗衣", "近百貨", "生活機能佳"],
-                badge: "精選"
-            },
-            {
-                id: 8,
-                title: "親子友善公寓",
-                district: "內湖區",
-                mrt: "文德站",
-                location: "內湖區 公園第一排",
-                price: 42000,
-                area: 45,
-                floor: 6,
-                roomType: "3房",
-                image: "https://images.unsplash.com/photo-1560448075-cbc16bb4af8e?w=800",
-                panorama: "https://images.unsplash.com/photo-1600607687644-c7171b42498b?w=2000",
-                features: ["學區房", "公園旁", "遊戲室", "親子友善"],
-                badge: "家庭"
-            },
-            {
-                id: 9,
-                title: "工業風LOFT",
-                district: "萬華區",
-                mrt: "龍山寺站",
-                location: "萬華區 文創特區",
-                price: 16000,
-                area: 22,
-                floor: 4,
-                roomType: "套房",
-                image: "https://images.unsplash.com/photo-1502672023488-70e25813eb80?w=800",
-                panorama: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=2000",
-                features: ["挑高空間", "開放廚房", "工業風", "藝文特區"],
-                badge: "特色"
             }
         ];
-
-        // 初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            loadProperties();
-            initPanorama();
-            initFilters();
-        });
-
-        // 載入房源
-        function loadProperties() {
-            const grid = document.getElementById('propertyGrid');
-            grid.innerHTML = properties.map(property => `
-                <div class="property-card">
-                    <div class="property-image" style="background-image: url('${property.image}')">
-                        <span class="property-badge">${property.badge}</span>
-                        <span class="view-360" onclick="open360(${property.id})">
-                            📷 360°
-                        </span>
-                    </div>
-                    <div class="property-info">
-                        <h3 class="property-title">${property.title}</h3>
-                        <div class="property-location">
-                            📍 ${property.location} | 🚇 ${property.mrt}
-                        </div>
-                        <div class="property-features">
-                            ${property.features.map(f => `<span class="feature-tag">${f}</span>`).join('')}
-                        </div>
-                        <div class="property-footer">
-                            <span class="property-price">$${property.price.toLocaleString()}/月</span>
-                            <button class="view-btn">查看詳情</button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // 初始化篩選器
-        function initFilters() {
-            // 監聽所有篩選器的變化
-            const selects = document.querySelectorAll('.filter-select');
-            selects.forEach(select => {
-                select.addEventListener('change', filterProperties);
-            });
-        }
-
-        // 篩選房源
-        function filterProperties() {
-            const district = document.getElementById('districtSelect').value;
-            const mrt = document.getElementById('mrtSelect').value;
-            const priceRange = document.getElementById('priceRange').value;
-            const roomType = document.getElementById('roomType').value;
-            
-            let filtered = properties;
-            
-            if (district) {
-                filtered = filtered.filter(p => p.district === district);
-            }
-            
-            if (mrt) {
-                filtered = filtered.filter(p => p.mrt === mrt);
-            }
-            
-            if (roomType) {
-                filtered = filtered.filter(p => p.roomType === roomType);
-            }
-            
-            if (priceRange) {
-                const [min, max] = priceRange.split('-').map(v => parseInt(v) || 999999);
-                filtered = filtered.filter(p => {
-                    if (priceRange.includes('+')) {
-                        return p.price >= parseInt(priceRange);
-                    }
-                    return p.price >= min && p.price <= max;
-                });
-            }
-            
-            // 更新顯示
-            const grid = document.getElementById('propertyGrid');
-            if (filtered.length === 0) {
-                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 50px;">沒有符合條件的房源</div>';
-            } else {
-                grid.innerHTML = filtered.map(property => `
-                    <div class="property-card">
-                        <div class="property-image" style="background-image: url('${property.image}')">
-                            <span class="property-badge">${property.badge}</span>
-                            <span class="view-360" onclick="open360(${property.id})">
-                                📷 360°
-                            </span>
-                        </div>
-                        <div class="property-info">
-                            <h3 class="property-title">${property.title}</h3>
-                            <div class="property-location">
-                                📍 ${property.location} | 🚇 ${property.mrt}
-                            </div>
-                            <div class="property-features">
-                                ${property.features.map(f => `<span class="feature-tag">${f}</span>`).join('')}
-                            </div>
-                            <div class="property-footer">
-                                <span class="property-price">$${property.price.toLocaleString()}/月</span>
-                                <button class="view-btn">查看詳情</button>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-            }
-        }
-
-        // 快捷篩選功能
-        function quickFilter(type) {
-            console.log('Quick filter:', type);
-            // 這裡可以加入實際的篩選邏輯
-            alert(`篩選：${type}`);
-        }
-
-        // 隱藏載入畫面
-        setTimeout(() => {
-            const splash = document.getElementById('splashScreen');
-            if (splash) {
-                splash.style.display = 'none';
-            }
-        }, 3000);
 
         // 設定面板開關
         function toggleSettings() {
@@ -1458,33 +812,43 @@ px;
             panel.classList.toggle('open');
         }
 
-        // 主題切換（修正版）
-        function setTheme(theme, btn) {
-            // 移除所有主題類別
-            document.body.className = document.body.className.replace(/theme-\w+/g, '');
-            // 添加新主題
-            document.body.classList.add(`theme-${theme}`);
+        // 主題切換（從導航列）
+        function setTheme(theme) {
+            document.body.className = `theme-${theme} font-normal`;
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`.theme-btn.${theme}`).classList.add('active');
             
-            // 保持字體大小設定
-            const fontSize = localStorage.getItem('fontSize') || 'normal';
-            document.body.classList.add(`font-${fontSize}`);
+            // 同步更新設定面板
+            document.querySelectorAll('.theme-option-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+        }
+
+        // 主題切換（從設定面板）
+        function setThemeFromPanel(theme, btn) {
+            document.body.className = document.body.className.replace(/theme-\w+/, `theme-${theme}`);
             
             // 更新按鈕狀態
-            document.querySelectorAll('.theme-btn').forEach(b => {
+            document.querySelectorAll('.theme-option-btn').forEach(b => {
                 b.classList.remove('active');
             });
             btn.classList.add('active');
             
+            // 同步更新導航列按鈕
+            document.querySelectorAll('.theme-btn').forEach(b => {
+                b.classList.remove('active');
+            });
+            document.querySelector(`.theme-btn.${theme}`).classList.add('active');
+            
             // 顯示/隱藏自訂顏色選擇器
             const colorPicker = document.getElementById('colorPicker');
             if (theme === 'custom') {
-                colorPicker.classList.add('show');
+                colorPicker.style.display = 'block';
             } else {
-                colorPicker.classList.remove('show');
+                colorPicker.style.display = 'none';
             }
-            
-            // 儲存設定
-            localStorage.setItem('theme', theme);
         }
 
         // 更新自訂主題
@@ -1493,15 +857,11 @@ px;
             root.style.setProperty('--custom-bg', document.getElementById('customBg').value);
             root.style.setProperty('--custom-primary', document.getElementById('customPrimary').value);
             root.style.setProperty('--custom-accent', document.getElementById('customAccent').value);
-            root.style.setProperty('--custom-text', document.getElementById('customText').value);
         }
 
-        // 字體大小切換（修正版）
+        // 字體大小切換
         function setFontSize(size, btn) {
-            // 移除所有字體大小類別
-            document.body.className = document.body.className.replace(/font-\w+/g, '');
-            // 添加新字體大小
-            document.body.classList.add(`font-${size}`);
+            document.body.className = document.body.className.replace(/font-\w+/, `font-${size}`);
             
             // 更新按鈕狀態
             document.querySelectorAll('.font-btn').forEach(b => {
@@ -1526,26 +886,82 @@ px;
             
             // 儲存設定
             localStorage.setItem('language', lang);
+        }
+
+        // 快捷功能動作
+        function quickAction(type) {
+            const actions = {
+                'subsidy': '租屋補助申請',
+                'gym': '健身房設施',
+                'pool': '游泳池',
+                'parking': '停車場',
+                'pet': '可養寵物',
+                'balcony': '陽台',
+                'window': '對外窗',
+                'heater': '熱水器'
+            };
             
-            // 這裡可以加入實際的語言切換邏輯
-            console.log('Language changed to:', lang);
+            // 模擬篩選
+            console.log('篩選:', actions[type]);
+            
+            // 可以加入實際篩選邏輯
+            const tags = document.querySelectorAll('.tag-btn');
+            tags.forEach(tag => {
+                if (tag.textContent === actions[type] || 
+                    (type === 'subsidy' && tag.textContent === '租屋補助') ||
+                    (type === 'window' && tag.textContent === '對外窗') ||
+                    (type === 'heater' && tag.textContent === '熱水器')) {
+                    tag.classList.add('active');
+                }
+            });
+        }
+
+        // 載入房源
+        function loadProperties() {
+            const grid = document.getElementById('propertyGrid');
+            grid.innerHTML = properties.map(property => `
+                <div class="property-card">
+                    <div class="property-image" style="background-image: url('${property.image}')">
+                        <span class="property-badge">${property.badge}</span>
+                        <span class="view-360" onclick="open360(${property.id})">📷 360°</span>
+                    </div>
+                    <div class="property-info">
+                        <h3 class="property-title">${property.title}</h3>
+                        <div class="property-location">📍 ${property.location}</div>
+                        <div class="property-features">
+                            ${property.features.map(f => `<span class="feature-tag">${f}</span>`).join('')}
+                        </div>
+                        <div class="property-footer">
+                            <span class="property-price">$${property.price.toLocaleString()}/月</span>
+                            <button class="view-btn">查看詳情</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 主題切換
+        function setTheme(theme) {
+            document.body.className = `theme-${theme} font-normal`;
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`.theme-btn.${theme}`).classList.add('active');
+        }
+
+        // 標籤切換
+        function toggleTag(btn) {
+            btn.classList.toggle('active');
         }
 
         // 360環景
-        let currentProperty = null;
-        let isDragging = false;
-        let startX = 0;
-        let scrollLeft = 0;
-
-        function open360(propertyId) {
-            currentProperty = properties.find(p => p.id === propertyId);
+        function open360(id) {
+            const property = properties.find(p => p.id === id);
             const modal = document.getElementById('panoramaModal');
             const panoramaView = document.getElementById('panoramaView');
             
-            panoramaView.style.backgroundImage = `url('${currentProperty.panorama}')`;
+            panoramaView.style.backgroundImage = `url('${property.panorama}')`;
             panoramaView.style.backgroundSize = '200% auto';
-            panoramaView.style.backgroundPosition = '0 center';
-            
             modal.classList.add('active');
         }
 
@@ -1553,60 +969,18 @@ px;
             document.getElementById('panoramaModal').classList.remove('active');
         }
 
-        function initPanorama() {
-            const panoramaView = document.getElementById('panoramaView');
-            
-            panoramaView.addEventListener('mousedown', (e) => {
-                isDragging = true;
-                panoramaView.classList.add('dragging');
-                startX = e.pageX;
-                scrollLeft = parseInt(panoramaView.style.backgroundPosition) || 0;
-            });
-
-            panoramaView.addEventListener('mousemove', (e) => {
-                if (!isDragging) return;
-                e.preventDefault();
-                const x = e.pageX;
-                const walk = (x - startX) * 0.5;
-                panoramaView.style.backgroundPosition = `${scrollLeft + walk}px center`;
-            });
-
-            panoramaView.addEventListener('mouseup', () => {
-                isDragging = false;
-                panoramaView.classList.remove('dragging');
-            });
-
-            panoramaView.addEventListener('mouseleave', () => {
-                isDragging = false;
-                panoramaView.classList.remove('dragging');
-            });
-        }
-
-        // 載入儲存的設定
-        window.addEventListener('load', () => {
-            const savedTheme = localStorage.getItem('theme') || 'professional';
-            const savedFontSize = localStorage.getItem('fontSize') || 'normal';
-            const savedLanguage = localStorage.getItem('language') || 'zh-TW';
-            
-            // 應用設定
-            document.body.classList.add(`theme-${savedTheme}`);
-            document.body.classList.add(`font-${savedFontSize}`);
-            document.documentElement.lang = savedLanguage;
-            
-            // 更新按鈕狀態
-            document.querySelector(`.theme-btn:nth-child(${savedTheme === 'professional' ? 1 : savedTheme === 'healing' ? 2 : 3})`).classList.add('active');
-            document.querySelector(`.font-btn:nth-child(${savedFontSize === 'small' ? 1 : savedFontSize === 'normal' ? 2 : savedFontSize === 'large' ? 3 : 4})`).classList.add('active');
-        });
-
-        // ESC 關閉模態框
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeModal();
-                if (document.getElementById('settingsPanel').classList.contains('open')) {
-                    toggleSettings();
-                }
+        // 隱藏載入畫面
+        setTimeout(() => {
+            const splash = document.getElementById('splashScreen');
+            if (splash) {
+                splash.style.display = 'none';
             }
-        });
+        }, 2500);
+
+        // 初始化
+        window.onload = () => {
+            loadProperties();
+        };
     </script>
 </body>
 </html>
