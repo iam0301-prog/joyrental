@@ -263,7 +263,7 @@
             transform: scale(1.05);
         }
 
-        /* 篩選器 - 沒有樓層！ */
+        /* 篩選器 */
         .filter-section {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -342,55 +342,52 @@
             border-color: var(--primary);
         }
 
-        /* 功能展示 - 超級精簡 */
-        .features {
-            padding: 30px 10px;
+        /* 擴充功能區 - 整合8個按鈕 */
+        .extension-features {
+            padding: 40px 20px;
+            background: var(--bg-main);
+        }
+
+        .extension-grid {
             max-width: 1200px;
             margin: 0 auto;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: var(--text-primary);
-        }
-
-        .feature-grid {
             display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 15px;
         }
 
-        .feature-card {
+        .extension-btn {
             background: var(--card-bg);
-            border-radius: 10px;
-            padding: 15px 10px;
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 20px 10px;
             text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            cursor: pointer;
             transition: all 0.3s;
+            box-shadow: var(--card-shadow);
         }
 
-        .feature-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.12);
+        .extension-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
-        .feature-icon {
-            font-size: 24px;
-            margin-bottom: 5px;
+        .extension-icon {
+            font-size: 36px;
+            margin-bottom: 8px;
         }
 
-        .feature-card h3 {
-            font-size: 12px;
-            margin-bottom: 3px;
+        .extension-title {
+            font-size: 14px;
             font-weight: 600;
         }
 
-        .feature-card p {
-            font-size: 10px;
+        .extension-desc {
+            font-size: 11px;
             color: var(--text-secondary);
-            line-height: 1.2;
+            margin-top: 4px;
         }
 
         /* 房源展示 */
@@ -414,6 +411,7 @@
             overflow: hidden;
             box-shadow: var(--card-shadow);
             transition: all 0.3s;
+            cursor: pointer;
         }
 
         .property-card:hover {
@@ -503,6 +501,23 @@
             color: var(--primary);
         }
 
+        .property-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.2);
+        }
+
         .view-btn {
             background: var(--primary);
             color: white;
@@ -550,6 +565,33 @@
             background-position: center;
             cursor: grab;
             border-radius: 10px;
+            position: relative;
+        }
+
+        .panorama-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            background: rgba(255,255,255,0.9);
+            padding: 10px 20px;
+            border-radius: 25px;
+        }
+
+        .control-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .control-btn:hover {
+            background: var(--accent);
         }
 
         .close-modal {
@@ -563,15 +605,37 @@
             border: none;
         }
 
+        /* 通知提示 */
+        .notification {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 3000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
         @media (max-width: 768px) {
             .filter-section {
                 grid-template-columns: 1fr;
             }
-            .feature-grid {
+            .extension-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
             .property-grid {
                 grid-template-columns: 1fr;
+            }
+            .hero h1 {
+                font-size: 32px;
             }
         }
     </style>
@@ -599,7 +663,7 @@
             
             <div class="nav-links">
                 <a href="#home">首頁</a>
-                <a href="#features">功能</a>
+                <a href="#extensions">一站式服務</a>
                 <a href="#properties">房源</a>
                 <a href="#about">關於</a>
                 
@@ -622,67 +686,67 @@
             <!-- 搜尋與篩選 -->
             <div class="search-filter-container">
                 <div class="search-box">
-                    <input type="text" class="search-input" placeholder="輸入地區、社區或關鍵字...">
-                    <button class="search-btn">🔍 智能搜尋</button>
+                    <input type="text" class="search-input" id="searchInput" placeholder="輸入地區、社區或關鍵字...">
+                    <button class="search-btn" onclick="searchProperties()">🔍 智能搜尋</button>
                 </div>
                 
-                <!-- 篩選器（沒有樓層！） -->
+                <!-- 篩選器 -->
                 <div class="filter-section">
                     <div class="filter-group">
                         <label class="filter-label">地區</label>
-                        <select class="filter-select">
-                            <option>所有地區</option>
-                            <option>中正區</option>
-                            <option>大安區</option>
-                            <option>信義區</option>
-                            <option>板橋區</option>
-                            <option>新店區</option>
+                        <select class="filter-select" id="areaFilter" onchange="filterProperties()">
+                            <option value="">所有地區</option>
+                            <option value="中正區">中正區</option>
+                            <option value="大安區">大安區</option>
+                            <option value="信義區">信義區</option>
+                            <option value="板橋區">板橋區</option>
+                            <option value="新店區">新店區</option>
                         </select>
                     </div>
                     
                     <div class="filter-group">
                         <label class="filter-label">捷運站</label>
-                        <select class="filter-select">
-                            <option>所有捷運站</option>
-                            <option>台北車站</option>
-                            <option>市政府站</option>
-                            <option>板橋站</option>
-                            <option>古亭站</option>
+                        <select class="filter-select" id="mrtFilter" onchange="filterProperties()">
+                            <option value="">所有捷運站</option>
+                            <option value="台北車站">台北車站</option>
+                            <option value="市政府站">市政府站</option>
+                            <option value="板橋站">板橋站</option>
+                            <option value="古亭站">古亭站</option>
                         </select>
                     </div>
                     
                     <div class="filter-group">
                         <label class="filter-label">租金範圍</label>
-                        <select class="filter-select">
-                            <option>不限</option>
-                            <option>10,000以下</option>
-                            <option>10,000-20,000</option>
-                            <option>20,000-30,000</option>
-                            <option>30,000以上</option>
+                        <select class="filter-select" id="priceFilter" onchange="filterProperties()">
+                            <option value="">不限</option>
+                            <option value="0-10000">10,000以下</option>
+                            <option value="10000-20000">10,000-20,000</option>
+                            <option value="20000-30000">20,000-30,000</option>
+                            <option value="30000-999999">30,000以上</option>
                         </select>
                     </div>
                     
                     <div class="filter-group">
                         <label class="filter-label">房型</label>
-                        <select class="filter-select">
-                            <option>不限</option>
-                            <option>套房</option>
-                            <option>雅房</option>
-                            <option>整層</option>
-                            <option>1房</option>
-                            <option>2房</option>
-                            <option>3房</option>
+                        <select class="filter-select" id="typeFilter" onchange="filterProperties()">
+                            <option value="">不限</option>
+                            <option value="套房">套房</option>
+                            <option value="雅房">雅房</option>
+                            <option value="整層">整層</option>
+                            <option value="1房">1房</option>
+                            <option value="2房">2房</option>
+                            <option value="3房">3房</option>
                         </select>
                     </div>
                     
                     <div class="filter-group">
                         <label class="filter-label">坪數</label>
-                        <select class="filter-select">
-                            <option>不限</option>
-                            <option>10坪以下</option>
-                            <option>10-20坪</option>
-                            <option>20-30坪</option>
-                            <option>30坪以上</option>
+                        <select class="filter-select" id="sizeFilter" onchange="filterProperties()">
+                            <option value="">不限</option>
+                            <option value="0-10">10坪以下</option>
+                            <option value="10-20">10-20坪</option>
+                            <option value="20-30">20-30坪</option>
+                            <option value="30-999">30坪以上</option>
                         </select>
                     </div>
                 </div>
@@ -691,68 +755,80 @@
                 <div class="quick-tags">
                     <div class="tag-group">
                         <span class="tag-label">設備：</span>
-                        <button class="tag-btn" onclick="toggleTag(this)">可開伙</button>
-                        <button class="tag-btn" onclick="toggleTag(this)">可養寵物</button>
-                        <button class="tag-btn" onclick="toggleTag(this)">含車位</button>
-                        <button class="tag-btn" onclick="toggleTag(this)">陽台</button>
-                        <button class="tag-btn" onclick="toggleTag(this)">電梯</button>
-                        <button class="tag-btn" onclick="toggleTag(this)">洗衣機</button>
-                        <button class="tag-btn" onclick="toggleTag(this)">冷氣</button>
-                        <button class="tag-btn" onclick="toggleTag(this)">新裝潢</button>
+                        <button class="tag-btn" onclick="toggleTag(this, 'cooking')">可開伙</button>
+                        <button class="tag-btn" onclick="toggleTag(this, 'pet')">可養寵物</button>
+                        <button class="tag-btn" onclick="toggleTag(this, 'parking')">含車位</button>
+                        <button class="tag-btn" onclick="toggleTag(this, 'balcony')">陽台</button>
+                        <button class="tag-btn" onclick="toggleTag(this, 'elevator')">電梯</button>
+                        <button class="tag-btn" onclick="toggleTag(this, 'washer')">洗衣機</button>
+                        <button class="tag-btn" onclick="toggleTag(this, 'ac')">冷氣</button>
+                        <button class="tag-btn" onclick="toggleTag(this, 'new')">新裝潢</button>
                     </div>
                     
                     <div class="tag-group">
                         <span class="tag-label">條件：</span>
-                        <button class="tag-btn" onclick="toggleTag(this)">近捷運5分鐘</button>
-                        <button class="tag-btn" onclick="toggleTag(this)">近學校</button>
-                        <button class="tag-btn" onclick="toggleTag(this)">近市場</button>
-                        <button class="tag-btn" onclick="toggleTag(this)">管理室</button>
-                        <button class="tag-btn" onclick="toggleTag(this)">垃圾代收</button>
-                        <button class="tag-btn" onclick="toggleTag(this)">含水電</button>
+                        <button class="tag-btn" onclick="toggleTag(this, 'mrt5')">近捷運5分鐘</button>
+                        <button class="tag-btn" onclick="toggleTag(this, 'school')">近學校</button>
+                        <button class="tag-btn" onclick="toggleTag(this, 'market')">近市場</button>
+                        <button class="tag-btn" onclick="toggleTag(this, 'management')">管理室</button>
+                        <button class="tag-btn" onclick="toggleTag(this, 'garbage')">垃圾代收</button>
+                        <button class="tag-btn" onclick="toggleTag(this, 'bills')">含水電</button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 功能展示（超精簡） -->
-    <section class="features" id="features">
-        <h2 class="section-title">革命性功能</h2>
-        <div class="feature-grid">
-            <div class="feature-card">
-                <div class="feature-icon">🏡</div>
-                <h3>360°環景</h3>
-                <p>身臨其境看房</p>
+    <!-- 擴充功能區 (8個按鈕) -->
+    <section class="extension-features" id="extensions">
+        <h2 class="section-title" style="text-align: center; margin-bottom: 30px; font-size: 28px;">智能擴充功能</h2>
+        <div class="extension-grid">
+            <div class="extension-btn" onclick="openExtension('vacuum')">
+                <div class="extension-icon">🤖</div>
+                <div class="extension-title">智能清潔</div>
+                <div class="extension-desc">掃地機器人</div>
             </div>
             
-            <div class="feature-card">
-                <div class="feature-icon">🤖</div>
-                <h3>AI配對</h3>
-                <p>智能推薦</p>
+            <div class="extension-btn" onclick="openExtension('water')">
+                <div class="extension-icon">💧</div>
+                <div class="extension-title">淨水系統</div>
+                <div class="extension-desc">水質監測</div>
             </div>
             
-            <div class="feature-card">
-                <div class="feature-icon">👥</div>
-                <h3>社群評價</h3>
-                <p>真實分享</p>
+            <div class="extension-btn" onclick="openExtension('air')">
+                <div class="extension-icon">🌬️</div>
+                <div class="extension-title">空氣清淨</div>
+                <div class="extension-desc">PM2.5監控</div>
             </div>
             
-            <div class="feature-card">
-                <div class="feature-icon">🛡️</div>
-                <h3>防詐系統</h3>
-                <p>安全保障</p>
+            <div class="extension-btn" onclick="openExtension('curtain')">
+                <div class="extension-icon">🪟</div>
+                <div class="extension-title">智能窗簾</div>
+                <div class="extension-desc">自動調光</div>
             </div>
             
-            <div class="feature-card">
-                <div class="feature-icon">🔧</div>
-                <h3>維修服務</h3>
-                <p>一站解決</p>
+            <div class="extension-btn" onclick="openExtension('heater')">
+                <div class="extension-icon">🔥</div>
+                <div class="extension-title">熱水器</div>
+                <div class="extension-desc">溫度控制</div>
             </div>
             
-            <div class="feature-card">
-                <div class="feature-icon">📱</div>
-                <h3>LINE整合</h3>
-                <p>便利溝通</p>
+            <div class="extension-btn" onclick="openExtension('washer')">
+                <div class="extension-icon">🌊</div>
+                <div class="extension-title">洗衣設備</div>
+                <div class="extension-desc">預約洗衣</div>
+            </div>
+            
+            <div class="extension-btn" onclick="openExtension('fridge')">
+                <div class="extension-icon">🧊</div>
+                <div class="extension-title">智能冰箱</div>
+                <div class="extension-desc">庫存管理</div>
+            </div>
+            
+            <div class="extension-btn" onclick="openExtension('doorbell')">
+                <div class="extension-icon">🔔</div>
+                <div class="extension-title">視訊門鈴</div>
+                <div class="extension-desc">訪客識別</div>
             </div>
         </div>
     </section>
@@ -767,178 +843,102 @@
     <div class="modal" id="panoramaModal">
         <div class="modal-content">
             <button class="close-modal" onclick="closeModal()">&times;</button>
-            <div class="panorama" id="panoramaView"></div>
+            <div class="panorama" id="panoramaView">
+                <div class="panorama-controls">
+                    <button class="control-btn" onclick="rotatePanorama('left')">← 左轉</button>
+                    <button class="control-btn" onclick="rotatePanorama('right')">右轉 →</button>
+                    <button class="control-btn" onclick="zoomPanorama('in')">放大 +</button>
+                    <button class="control-btn" onclick="zoomPanorama('out')">縮小 -</button>
+                </div>
+            </div>
         </div>
     </div>
 
+    <!-- 通知提示 -->
+    <div class="notification" id="notification"></div>
+
     <script>
-        // 房源資料
+        // 房源資料庫
         const properties = [
             {
                 id: 1,
                 title: "陽光療癒套房",
                 location: "板橋區 幸福社區",
+                area: "板橋區",
+                mrt: "板橋站",
                 price: 15000,
+                size: 12,
+                type: "套房",
                 image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800",
                 panorama: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=2000",
-                features: ["近捷運", "可養寵物", "陽台", "管理室"],
-                badge: "熱門"
+                features: ["近捷運", "可養寵物", "陽台", "管理室", "新裝潢"],
+                badge: "熱門",
+                isFavorite: false
             },
             {
                 id: 2,
                 title: "極簡風格公寓",
                 location: "信義區 都心首選",
+                area: "信義區",
+                mrt: "市政府站",
                 price: 28000,
+                size: 25,
+                type: "2房",
                 image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800",
                 panorama: "https://images.unsplash.com/photo-1600607687644-c7171b42498b?w=2000",
-                features: ["新裝潢", "健身房", "停車位", "電梯"],
-                badge: "推薦"
+                features: ["新裝潢", "健身房", "停車位", "電梯", "垃圾代收"],
+                badge: "推薦",
+                isFavorite: false
             },
             {
                 id: 3,
                 title: "文青小屋",
                 location: "大安區 靜巷雅居",
+                area: "大安區",
+                mrt: "古亭站",
                 price: 12000,
+                size: 8,
+                type: "雅房",
                 image: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800",
                 panorama: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=2000",
                 features: ["採光佳", "近咖啡廳", "安靜", "可開伙"],
-                badge: "新上架"
+                badge: "新上架",
+                isFavorite: false
+            },
+            {
+                id: 4,
+                title: "現代簡約一房",
+                location: "中正區 市中心",
+                area: "中正區",
+                mrt: "台北車站",
+                price: 22000,
+                size: 18,
+                type: "1房",
+                image: "https://images.unsplash.com/photo-1522444690501-8c1f28b5e0b0?w=800",
+                panorama: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=2000",
+                features: ["電梯", "管理室", "近捷運5分鐘", "洗衣機"],
+                badge: "優選",
+                isFavorite: false
+            },
+            {
+                id: 5,
+                title: "溫馨三房家庭",
+                location: "新店區 學區住宅",
+                area: "新店區",
+                mrt: "",
+                price: 35000,
+                size: 35,
+                type: "3房",
+                image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800",
+                panorama: "https://images.unsplash.com/photo-1600607688066-890987f18a86?w=2000",
+                features: ["近學校", "含車位", "陽台", "可養寵物", "含水電"],
+                badge: "家庭首選",
+                isFavorite: false
             }
         ];
 
-        // 設定面板開關
-        function toggleSettings() {
-            const panel = document.getElementById('settingsPanel');
-            panel.classList.toggle('open');
-        }
-
-        // 主題切換（從導航列）
-        function setTheme(theme) {
-            document.body.className = `theme-${theme} font-normal`;
-            document.querySelectorAll('.theme-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            document.querySelector(`.theme-btn.${theme}`).classList.add('active');
-            
-            // 同步更新設定面板
-            document.querySelectorAll('.theme-option-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-        }
-
-        // 主題切換（從設定面板）
-        function setThemeFromPanel(theme, btn) {
-            document.body.className = document.body.className.replace(/theme-\w+/, `theme-${theme}`);
-            
-            // 更新按鈕狀態
-            document.querySelectorAll('.theme-option-btn').forEach(b => {
-                b.classList.remove('active');
-            });
-            btn.classList.add('active');
-            
-            // 同步更新導航列按鈕
-            document.querySelectorAll('.theme-btn').forEach(b => {
-                b.classList.remove('active');
-            });
-            document.querySelector(`.theme-btn.${theme}`).classList.add('active');
-            
-            // 顯示/隱藏自訂顏色選擇器
-            const colorPicker = document.getElementById('colorPicker');
-            if (theme === 'custom') {
-                colorPicker.style.display = 'block';
-            } else {
-                colorPicker.style.display = 'none';
-            }
-        }
-
-        // 更新自訂主題
-        function updateCustomTheme() {
-            const root = document.documentElement;
-            root.style.setProperty('--custom-bg', document.getElementById('customBg').value);
-            root.style.setProperty('--custom-primary', document.getElementById('customPrimary').value);
-            root.style.setProperty('--custom-accent', document.getElementById('customAccent').value);
-        }
-
-        // 字體大小切換
-        function setFontSize(size, btn) {
-            document.body.className = document.body.className.replace(/font-\w+/, `font-${size}`);
-            
-            // 更新按鈕狀態
-            document.querySelectorAll('.font-btn').forEach(b => {
-                b.classList.remove('active');
-            });
-            btn.classList.add('active');
-            
-            // 儲存設定
-            localStorage.setItem('fontSize', size);
-        }
-
-        // 語言切換
-        function setLanguage(lang, btn) {
-            // 更新按鈕狀態
-            document.querySelectorAll('.lang-btn').forEach(b => {
-                b.classList.remove('active');
-            });
-            btn.classList.add('active');
-            
-            // 更新 HTML lang 屬性
-            document.documentElement.lang = lang;
-            
-            // 儲存設定
-            localStorage.setItem('language', lang);
-        }
-
-        // 快捷功能動作
-        function quickAction(type) {
-            const actions = {
-                'subsidy': '租屋補助申請',
-                'gym': '健身房設施',
-                'pool': '游泳池',
-                'parking': '停車場',
-                'pet': '可養寵物',
-                'balcony': '陽台',
-                'window': '對外窗',
-                'heater': '熱水器'
-            };
-            
-            // 模擬篩選
-            console.log('篩選:', actions[type]);
-            
-            // 可以加入實際篩選邏輯
-            const tags = document.querySelectorAll('.tag-btn');
-            tags.forEach(tag => {
-                if (tag.textContent === actions[type] || 
-                    (type === 'subsidy' && tag.textContent === '租屋補助') ||
-                    (type === 'window' && tag.textContent === '對外窗') ||
-                    (type === 'heater' && tag.textContent === '熱水器')) {
-                    tag.classList.add('active');
-                }
-            });
-        }
-
-        // 載入房源
-        function loadProperties() {
-            const grid = document.getElementById('propertyGrid');
-            grid.innerHTML = properties.map(property => `
-                <div class="property-card">
-                    <div class="property-image" style="background-image: url('${property.image}')">
-                        <span class="property-badge">${property.badge}</span>
-                        <span class="view-360" onclick="open360(${property.id})">📷 360°</span>
-                    </div>
-                    <div class="property-info">
-                        <h3 class="property-title">${property.title}</h3>
-                        <div class="property-location">📍 ${property.location}</div>
-                        <div class="property-features">
-                            ${property.features.map(f => `<span class="feature-tag">${f}</span>`).join('')}
-                        </div>
-                        <div class="property-footer">
-                            <span class="property-price">$${property.price.toLocaleString()}/月</span>
-                            <button class="view-btn">查看詳情</button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
+        // 選中的標籤
+        let selectedTags = [];
 
         // 主題切換
         function setTheme(theme) {
@@ -947,26 +947,394 @@
                 btn.classList.remove('active');
             });
             document.querySelector(`.theme-btn.${theme}`).classList.add('active');
+            
+            // 儲存到 localStorage
+            localStorage.setItem('theme', theme);
         }
 
         // 標籤切換
-        function toggleTag(btn) {
+        function toggleTag(btn, tag) {
             btn.classList.toggle('active');
+            
+            if (btn.classList.contains('active')) {
+                selectedTags.push(tag);
+            } else {
+                selectedTags = selectedTags.filter(t => t !== tag);
+            }
+            
+            filterProperties();
         }
 
-        // 360環景
+        // 搜尋功能
+        function searchProperties() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = properties.filter(p => 
+                p.title.toLowerCase().includes(searchTerm) ||
+                p.location.toLowerCase().includes(searchTerm) ||
+                p.features.some(f => f.toLowerCase().includes(searchTerm))
+            );
+            
+            displayProperties(filtered);
+            showNotification(`找到 ${filtered.length} 個符合的房源`);
+        }
+
+        // 篩選功能
+        function filterProperties() {
+            let filtered = [...properties];
+            
+            // 地區篩選
+            const area = document.getElementById('areaFilter').value;
+            if (area) {
+                filtered = filtered.filter(p => p.area === area);
+            }
+            
+            // 捷運篩選
+            const mrt = document.getElementById('mrtFilter').value;
+            if (mrt) {
+                filtered = filtered.filter(p => p.mrt === mrt);
+            }
+            
+            // 價格篩選
+            const priceRange = document.getElementById('priceFilter').value;
+            if (priceRange) {
+                const [min, max] = priceRange.split('-').map(Number);
+                filtered = filtered.filter(p => p.price >= min && p.price <= max);
+            }
+            
+            // 房型篩選
+            const type = document.getElementById('typeFilter').value;
+            if (type) {
+                filtered = filtered.filter(p => p.type === type);
+            }
+            
+            // 坪數篩選
+            const sizeRange = document.getElementById('sizeFilter').value;
+            if (sizeRange) {
+                const [min, max] = sizeRange.split('-').map(Number);
+                filtered = filtered.filter(p => p.size >= min && p.size <= max);
+            }
+            
+            // 標籤篩選
+            if (selectedTags.length > 0) {
+                filtered = filtered.filter(p => {
+                    const tagMapping = {
+                        'cooking': '可開伙',
+                        'pet': '可養寵物',
+                        'parking': '含車位',
+                        'balcony': '陽台',
+                        'elevator': '電梯',
+                        'washer': '洗衣機',
+                        'ac': '冷氣',
+                        'new': '新裝潢',
+                        'mrt5': '近捷運5分鐘',
+                        'school': '近學校',
+                        'market': '近市場',
+                        'management': '管理室',
+                        'garbage': '垃圾代收',
+                        'bills': '含水電'
+                    };
+                    
+                    return selectedTags.every(tag => 
+                        p.features.includes(tagMapping[tag])
+                    );
+                });
+            }
+            
+            displayProperties(filtered);
+        }
+
+        // 顯示房源
+        function displayProperties(propertiesToShow = properties) {
+            const grid = document.getElementById('propertyGrid');
+            
+            if (propertiesToShow.length === 0) {
+                grid.innerHTML = '<div style="text-align: center; padding: 40px; color: #999;">沒有符合條件的房源</div>';
+                return;
+            }
+            
+            grid.innerHTML = propertiesToShow.map(property => `
+                <div class="property-card" onclick="viewProperty(${property.id})">
+                    <div class="property-image" style="background-image: url('${property.image}')">
+                        <span class="property-badge">${property.badge}</span>
+                        <span class="view-360" onclick="event.stopPropagation(); open360(${property.id})">📷 360°</span>
+                    </div>
+                    <div class="property-info">
+                        <h3 class="property-title">${property.title}</h3>
+                        <div class="property-location">📍 ${property.location}</div>
+                        <div class="property-features">
+                            ${property.features.slice(0, 4).map(f => `<span class="feature-tag">${f}</span>`).join('')}
+                        </div>
+                        <div class="property-footer">
+                            <span class="property-price">$${property.price.toLocaleString()}/月</span>
+                            <div class="property-actions">
+                                <button class="action-btn" onclick="event.stopPropagation(); toggleFavorite(${property.id})">
+                                    ${property.isFavorite ? '❤️' : '🤍'}
+                                </button>
+                                <button class="action-btn" onclick="event.stopPropagation(); shareProperty(${property.id})">
+                                    📤
+                                </button>
+                                <button class="view-btn">查看詳情</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 360環景相關
+        let currentPanoramaX = 0;
+        let currentZoom = 100;
+
         function open360(id) {
             const property = properties.find(p => p.id === id);
             const modal = document.getElementById('panoramaModal');
             const panoramaView = document.getElementById('panoramaView');
             
             panoramaView.style.backgroundImage = `url('${property.panorama}')`;
-            panoramaView.style.backgroundSize = '200% auto';
+            panoramaView.style.backgroundSize = `${currentZoom}% auto`;
+            panoramaView.style.backgroundPosition = `${currentPanoramaX}% center`;
             modal.classList.add('active');
+            
+            showNotification('拖曳或使用控制按鈕來瀏覽360°環景');
+        }
+
+        function rotatePanorama(direction) {
+            if (direction === 'left') {
+                currentPanoramaX -= 10;
+            } else {
+                currentPanoramaX += 10;
+            }
+            
+            const panoramaView = document.getElementById('panoramaView');
+            panoramaView.style.backgroundPosition = `${currentPanoramaX}% center`;
+        }
+
+        function zoomPanorama(type) {
+            if (type === 'in' && currentZoom < 200) {
+                currentZoom += 20;
+            } else if (type === 'out' && currentZoom > 50) {
+                currentZoom -= 20;
+            }
+            
+            const panoramaView = document.getElementById('panoramaView');
+            panoramaView.style.backgroundSize = `${currentZoom}% auto`;
         }
 
         function closeModal() {
             document.getElementById('panoramaModal').classList.remove('active');
+            currentPanoramaX = 0;
+            currentZoom = 100;
+        }
+
+        // 一站式服務功能
+        function openService(type) {
+            const services = {
+                'accounting': {
+                    title: '自動對帳系統',
+                    content: `
+                        <h3>💰 自動對帳功能</h3>
+                        <ul style="text-align: left; line-height: 2;">
+                            <li>✅ 每月自動記錄房租收支</li>
+                            <li>✅ 銀行帳戶串接對帳</li>
+                            <li>✅ 押金管理與退還追蹤</li>
+                            <li>✅ 水電費分攤計算</li>
+                            <li>✅ 產生月結報表</li>
+                        </ul>
+                    `
+                },
+                'reminder': {
+                    title: '智能繳租提醒',
+                    content: `
+                        <h3>⏰ 繳租提醒服務</h3>
+                        <ul style="text-align: left; line-height: 2;">
+                            <li>✅ LINE 自動通知房客</li>
+                            <li>✅ 繳租前3天、1天提醒</li>
+                            <li>✅ 逾期自動催繳通知</li>
+                            <li>✅ 房東收款確認通知</li>
+                            <li>✅ 繳費記錄查詢</li>
+                        </ul>
+                    `
+                },
+                'subsidy': {
+                    title: '政府租屋補助申請',
+                    content: `
+                        <h3>🏛️ 一鍵申請租屋補助</h3>
+                        <ul style="text-align: left; line-height: 2;">
+                            <li>✅ 300億租金補貼專案</li>
+                            <li>✅ 單身青年租屋補助</li>
+                            <li>✅ 新婚家庭租屋補助</li>
+                            <li>✅ 育兒家庭租屋補助</li>
+                            <li>✅ 資格檢測與文件準備</li>
+                            <li>✅ 申請進度追蹤</li>
+                        </ul>
+                        <p style="color: #E74C3C; margin-top: 15px;">最高每月可領 $8,000 補助！</p>
+                    `
+                },
+                'tax': {
+                    title: '租金報稅服務',
+                    content: `
+                        <h3>📋 自動報稅功能</h3>
+                        <ul style="text-align: left; line-height: 2;">
+                            <li>✅ 房東租金收入自動申報</li>
+                            <li>✅ 房客租金列舉扣除</li>
+                            <li>✅ 每年最高12萬扣除額</li>
+                            <li>✅ 電子發票自動歸戶</li>
+                            <li>✅ 稅務試算與建議</li>
+                        </ul>
+                        <p style="color: #27AE60; margin-top: 15px;">合法節稅，省下數千元！</p>
+                    `
+                },
+                'contract': {
+                    title: '線上簽約系統',
+                    content: `
+                        <h3>📄 電子合約服務</h3>
+                        <ul style="text-align: left; line-height: 2;">
+                            <li>✅ 內政部定型化契約</li>
+                            <li>✅ 線上簽名認證</li>
+                            <li>✅ 合約自動存證</li>
+                            <li>✅ 到期提醒續約</li>
+                            <li>✅ 法律諮詢服務</li>
+                        </ul>
+                    `
+                },
+                'invoice': {
+                    title: '電子發票系統',
+                    content: `
+                        <h3>🧾 電子發票開立</h3>
+                        <ul style="text-align: left; line-height: 2;">
+                            <li>✅ 每月自動開立發票</li>
+                            <li>✅ 載具自動歸戶</li>
+                            <li>✅ 中獎自動通知</li>
+                            <li>✅ 營業稅申報協助</li>
+                            <li>✅ 發票管理與下載</li>
+                        </ul>
+                    `
+                },
+                'repair': {
+                    title: '維修媒合平台',
+                    content: `
+                        <h3>🔧 報修服務</h3>
+                        <ul style="text-align: left; line-height: 2;">
+                            <li>✅ 24小時線上報修</li>
+                            <li>✅ 認證維修廠商媒合</li>
+                            <li>✅ 透明報價系統</li>
+                            <li>✅ 維修進度追蹤</li>
+                            <li>✅ 保固期管理</li>
+                        </ul>
+                    `
+                },
+                'moving': {
+                    title: '搬家服務媒合',
+                    content: `
+                        <h3>📦 搬家服務</h3>
+                        <ul style="text-align: left; line-height: 2;">
+                            <li>✅ 優質搬家公司推薦</li>
+                            <li>✅ 線上估價系統</li>
+                            <li>✅ JoyRental 會員優惠</li>
+                            <li>✅ 搬家保險服務</li>
+                            <li>✅ 打包材料提供</li>
+                        </ul>
+                    `
+                }
+            };
+            
+            const service = services[type];
+            if (service) {
+                // 建立詳細說明的modal
+                const modal = document.createElement('div');
+                modal.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0,0,0,0.8);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 3000;
+                `;
+                
+                modal.innerHTML = `
+                    <div style="
+                        background: white;
+                        border-radius: 20px;
+                        padding: 40px;
+                        max-width: 500px;
+                        width: 90%;
+                        max-height: 80vh;
+                        overflow-y: auto;
+                        position: relative;
+                        text-align: center;
+                    ">
+                        <button onclick="this.closest('div').parentElement.remove()" style="
+                            position: absolute;
+                            top: 15px;
+                            right: 15px;
+                            background: none;
+                            border: none;
+                            font-size: 24px;
+                            cursor: pointer;
+                        ">✕</button>
+                        
+                        ${service.content}
+                        
+                        <button style="
+                            background: var(--primary);
+                            color: white;
+                            border: none;
+                            padding: 12px 30px;
+                            border-radius: 25px;
+                            font-size: 16px;
+                            margin-top: 20px;
+                            cursor: pointer;
+                        " onclick="
+                            showNotification('功能開發中，敬請期待！');
+                            this.closest('div').parentElement.remove();
+                        ">立即使用</button>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                showNotification(`開啟${service.title}`);
+            }
+        }
+
+        // 其他功能
+        function viewProperty(id) {
+            showNotification('正在載入房源詳情...');
+            // 這裡可以導向詳細頁面
+        }
+
+        function toggleFavorite(id) {
+            const property = properties.find(p => p.id === id);
+            property.isFavorite = !property.isFavorite;
+            displayProperties(properties);
+            showNotification(property.isFavorite ? '已加入收藏' : '已移除收藏');
+        }
+
+        function shareProperty(id) {
+            const property = properties.find(p => p.id === id);
+            if (navigator.share) {
+                navigator.share({
+                    title: property.title,
+                    text: `${property.location} - $${property.price}/月`,
+                    url: window.location.href
+                });
+            } else {
+                showNotification('分享連結已複製');
+            }
+        }
+
+        // 通知功能
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
         }
 
         // 隱藏載入畫面
@@ -977,10 +1345,42 @@
             }
         }, 2500);
 
-        // 初始化
+        // 載入設定
         window.onload = () => {
-            loadProperties();
+            // 載入主題設定
+            const savedTheme = localStorage.getItem('theme') || 'professional';
+            setTheme(savedTheme);
+            
+            // 載入房源
+            displayProperties();
         };
+
+        // 拖曳功能
+        let isDragging = false;
+        let startX = 0;
+
+        document.getElementById('panoramaView').addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX;
+            e.target.style.cursor = 'grabbing';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            
+            const deltaX = e.clientX - startX;
+            currentPanoramaX += deltaX * 0.1;
+            startX = e.clientX;
+            
+            const panoramaView = document.getElementById('panoramaView');
+            panoramaView.style.backgroundPosition = `${currentPanoramaX}% center`;
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+            const panoramaView = document.getElementById('panoramaView');
+            if (panoramaView) panoramaView.style.cursor = 'grab';
+        });
     </script>
 </body>
 </html>
